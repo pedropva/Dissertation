@@ -1,0 +1,88 @@
+\section{Related Work}
+\label{sec:related}
+% VARIFICAR: https://www.sciencedirect.com/science/article/pii/S0925231217312493
+
+% commented out because wqe have a more recent paper from theese same authors
+%Song and Kin~\cite{song2018pornographic} create a scheme for detecting pornography videos using multimodal features: Image descriptor features of the frame sequence, extracted using the VGG-16 CNN\cite{vgg}, motion features extracted using optical flow\cite{opticalflow}, and audio features extracted using a Mel-scaled spectrogram.
+%The final features for each model are obtained by an average pooling of each of the features by a sample in the video.
+%Each of those kinds of features is used in a single SVM classifier per type of feature, resulting in an image sequence-based detector, a motion-based detector, and an audio-based detector.
+%The final decision-making is done by model stacking all detectors.
+%The authors used a modified dataset based on the 2k-pornography dataset\cite{2kdataset} for training and testing.
+%The results of their method are an average of 63.4\% with a 100\% true positive rate for porn, and an average of 23.5\% of the false-positive rate. 
+%Our work also uses multimodal features, but we only use image sequence features and audio features, furthermore, we use an Inception-V3 CNN instead of the VGG-16 CNN for extracting image sequence features and use an Audio VGG CNN for extracting audio features.
+%Although the authors achieve 100\% recall rate for pornography, which is the main goal of their task, their model also has a 23.5\% false-positive rate, which means that normal videos would be occasionally classified as pornography.
+%Our aim is to also have a true positive rate as high as theirs, while still further reducing the false positive rate.
+
+Castro~\cite{torres2018automatic} shows an implementation of a pornography video classifier using a convolutional neural network from Open pornography\cite{mahadeokar2016open}.
+The CNN does a logistic regression on each frame, resulting in a value from 0 to 1 at each frame.
+The higher the value is, the higher is the likelihood of the frame being pornography.
+The dataset used contained 90 non-pornography video segments and 89 pornography video segments extracted from 11 movies.
+The final score for the video the max value from all frames of the video.
+The experiment showed an accuracy of 81\%, F1-score, and Matthew’s correlation coefficient(MCC) for the pornography class of 0.8047 and 0.6343, respectively.
+%Although the work also approaches pornography content detection in videos problem with CNN like ours, it does not make use of audio features.
+%The method is also different, it performs the regression first, then it takes the max value from all frames of the video, while ours combines features from all frames of the video into a single vector of features(by averaging) and then performs classification on the resulting features.
+
+Wehrmann \textit{et al.}~\cite{wehrmann2018adult} classify adult content trained on the NPDI video dataset, which consists of 802 videos, totaling 80 hours of videos, half of them with adult content.
+Those videos were processed by keyframes, varying between 1 and 320 frames per video.
+The selected keyframes of each video were chosen by a scene segmentation algorithm, resulting in 16727 images.
+Their architecture consists of a Convolutional Network and an LSTM~\cite{hochreiter1997long} (Long-Short Term Memory).
+Those models were chosen for feature extraction with CNN and sequence learning with LSTM, taking into consideration modifications on the images such as scaling and distorting.
+Using this approach the authors achieved a score of 95.3\% accuracy using a ROC curve as an evaluation criterion.
+%In our model, we also approached the video analysis using frame by frame processing, but we chose evenly spaced frames by their timestamps, not a segmentation algorithm.
+%We also processed the extracted sound and image embeddings from each frame using a pre-trained Convolutional Neural Network, instead of an untrained one.
+%\hl{Resulting in an accuracy of 98\% and 97.97\% F1-score for pornography class.}
+
+Sing \textit{at. al.}\cite{singh2019kidsguard} proposes a fine-grained approach for child unsafe video representation and detection. One of its main objectives is to optimize detection on sparsely present child unsafe content and it does so by using a VGG16\cite{vgg} Convolutional Neural Network (CNN) to encode each frame, at 1-second granularity, in 512 real values. 
+Then an LSTM autoencoder is trained to output the sequence backward on those encoded frames. 
+Once the LSTM autoencoder is trained, then a fully connected layer of neurons is used to fine-tune and classify each frame. 
+The dataset used comprises 109,835 short-duration video clips extracted from four animes. 
+The results for binary classification using safe and unsafe classes were 81\% recall for unsafe and 80\% recall for safe class.
+%Although this work also has similar objectives as ours and also uses a CNN-based encoding method, ours uses both visual and auditive features to encode a video. 
+%Their work uses 1 frame per second granularity and ours has the same encoding rate. The main differences between both works are on the dataset: Theirs consists of small clips of only anime videos. Ours also uses other types of videos such as live-action and other animations. 
+%In our dataset, the length of videos range from 6 seconds to 30 minutes.
+
+Song \textit{at. al.}~\cite{song2020enhanced} proposed a multimodal stacking scheme for quick and accurate online detection of pornographic content.
+Their work uses both visual and auditory features as input for their detection method. 
+They use a VGG16 model and a bi-directional Recurrent Neural Network (RNN) to extract visual features and a combination of a Mel-scaled spectrogram followed by multilayered dilated convolutions to extract audio features. 
+Using only the visual and auditory features, a video classifier and an audio classifier are trained, respectively. 
+By using both features together, one fusion classifier is also trained.
+Then, these three component classifiers are combined in an ensemble scheme to reduce the false-negative errors and for faster detection. 
+The proposed detection method yields a true positive rate of 95.40\% and a false negative rate of 4.60\% on the pornography class, totaling a recall for the pornography class of 95.40\%. 
+The dataset used was the pornography-2k\cite{2kdataset} dataset plus examples of videos with only pornographic or non-pornographic audio collected by the authors. 
+% This work is similar to ours because it also uses a multimodal approach to detection, albeit ours is not for pornography detection only.
+% It also uses the same sampling rate of a frame for each second and uses a deep learning method for extracting high-level features, which are then classified by one or more machine learning models. 
+% Our work has a different dataset, comprised of pornography, gore, and violent videos for the inappropriate class and miscellaneous and educational YouTube videos as an appropriate class. 
+% We also use different feature extraction methods for image and audio features. 
+% Finally, in contrast with their ensemble approach, we use a single SVM model to classify the extracted features from our dataset.
+
+Moreira \textit{et.al.}~\cite{moreira2019multimodal} has similar detection focuses as ours: Pornography and violence. 
+Their method uses four multi-modal classifiers, two for audio and two for image, those classifiers were fed features from multiple handcrafted feature extraction methods. Their work also allows for sensitive scene localization and is geared towards mobile device applications.
+%Our uses Deep Learning to extract high-level features and uses one classifier for both aggregation and classification of the features. 
+The authors propose a method for sensitive scene localization which uses the output of four multi-modal classifiers on snippets of the video, then creates a fusion vector at each second of the video. 
+Finally, they test different classifiers on the fusion vector for each task: detecting pornography and detecting violence. Their best result on the pornography task was 90.75\% accuracy and 93.53\% on the F2 metric. For the violent videos, they achieved 0.502 on the MAP2014 evaluation metric.
+%Some differences between this work and our are mainly its objectives: To detect if and at what time the sensitive video occurs. 
+%While our only objective is to detect if there is or not sensitive content in a video. Our definition of violent videos consists of extremely violent videos, while theirs also considers fights and hat-speech. Other differences stand out as the dataset and the methods used for feature extraction and classification. 
+%We use an author-made dataset and investigate what result of a deep learning-based approach to this problem can yield.
+
+%THEIR METHOD'S FINAL USER IS A PERSON USING A MOBILE DEVICE, OUR METHOD IS AIMED TO VIDEO HOSTING PLATFORMS, NOT USERS}
+
+%THEIR METHOD EVALUATES ON EACH FRAME, OUR ON THE ENTIRE VIDEO}
+
+The paper "Porn Streamer Recognition in Live Video Streaming via Attention-Gated Multimodal Deep Features"~\cite{wang2019porn} proposes a pornography method for use in live streams, focusing on real-time processing, their work uses multimodal features, namely, image, audio, and optical flow~\cite{horn1981opticalflow}. 
+An Xception~\cite{chollet2017xception} model is used to extract spatial features from keyframes. 
+To get the optical flow frames, they also use a CNN to extract the optical flow from the video, then, use another Xception model to extract the high-level optical flow features. 
+Finally, they use a short-time Fourier transformation to create spectrograms and feed those spectrograms to a third Xception model and thus acquiring the extracted audio features.  
+Each of the multimodal features extracted then is passed onto bidirectional GRUs\cite{dey2017GRU}, to obtain temporal context, then, to create a better-unified representation, all the features go through three interconnected Attention-gated layers, each with three Attention-gated units proposed in the paper. After obtaining the dense representation of the input types, it is applied a fully connected layer of neurons with \textit{softmax} function. Their work archives 76.33\% accuracy and runs at 66.1 fps.
+%In our work, we strive for detecting both violence and pornography, we use only two types of input data, image, and audio, and we use a specific CNN for each type of data, while their work focused only on detecting pornography and used the same CNN model for all three types of input. 
+%We investigate whether bigger and more specialized models can create better high-level features and further increase the quality of classification.
+
+Liu \textit{et. al.} ~\cite{liu2020analyzing} proposes a multi-modal approach to pornography detection, it uses audio-frames and visual-frames to create handcrafted low-level features based on, respectively, periodic patterns and salient regions. Once those features are extracted, they use k-means clustering to create audio and visual codebooks. 
+Then, low-level audio and visual features of test videos are converted into mid-level semantic histograms via de audio or visual codebook. 
+Finally, the histograms are concatenated to represent the video and a periodicity-based video decision algorithm is used to fuse the classification results of multi-modal codebooks and the results of an SVM trained on the concatenated mid-level semantic features train set.
+The true positive rate of their approach achieves 96.7\% while the false positive rate is about 10\%.
+%Liu \textit{et. al.} detects pornography, they do not detect violence, and also use handcrafted features such as Region Of Interest (ROI) extraction and skin-color segmentation.
+%Whereas our approach uses a fully automatic feature extraction method based on CNNs and our feature fusion method consists of just a concatenation followed by a classifier.
+
+%Although most of the aforementioned works also approach pornography detection in videos but do not consider violent videos like ours.
+Most related works focus on pornography detection alone, while ours aims at detecting either pornographic or violent content. Moreover, some of them only use image-frame features, whereas we use both audio and image-frame features. We also use deep learning feature extraction methods instead of hand-crafted ones.
+Finally, a central difference is our dataset: Ours contains violent scenes and is significantly larger than most datasets used on other related works.

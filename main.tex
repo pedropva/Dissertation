@@ -1,0 +1,126 @@
+\documentclass[11pt]{article}
+
+\usepackage[pdftex]{graphicx} % OU
+% \usepackage[dvips]{graphicx}
+
+% \usepackage[round]{natbib}
+\usepackage{adjustbox,array,url,hyperref,multirow,makecell,tabularx,caption,subcaption}
+% \usepackage{url,hyperref,multirow,makecell}
+\usepackage[table]{xcolor}
+\usepackage{lipsum}
+\usepackage{cite}
+\usepackage{amsfonts}
+%\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
+%\usepackage[brazilian,brazil]{babel}
+%\usepackage{apacite}
+%\usepackage{float}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{todonotes}
+\newcommand{\pmendes}[1]{\color{blue}\textbf{paulo says: }#1\color{black}}
+\newcommand{\palan}[1]{\color{red}\textbf{alan says: }#1\color{black}}
+\newcommand{\pdsm}[1]{\color{green}\textbf{daniel says: }#1\color{black}}
+
+\usepackage{tikz}
+\usetikzlibrary{
+  angles,
+  arrows,
+  arrows.meta,
+  calc,
+  intersections,
+  positioning,
+  quotes,
+  shapes.geometric,
+  through,
+}
+\tikzset{
+  x=0em,
+  y=0em,
+  node distance=1.2em,
+  >=stealth',
+}
+
+\newcommand*\rot[1]{\rotatebox{90}{#1}}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\CQD}{\mbox{\rule[0pt]{1.5ex}{1.5ex}}\medskip}
+\newcommand{\M}{\mathcal{M}}
+
+\setlength{\oddsidemargin}{0.5cm} \setlength{\textwidth}{15cm}
+\setlength{\topmargin}{-1.5cm} \setlength{\textheight}{22.3cm}%{24.7cm}
+
+\usepackage{pdfpages}
+
+\begin{document}
+
+\LARGE
+
+% \bigskip
+
+%% TITLE
+\begin{center}
+{\bf Sensitive Content Detection in Video with Deep Learning
+\Large
+\\Dissertation}
+\end{center}
+
+
+\bigskip
+\normalsize
+
+\begin{flushright}
+
+Pedro Vincius Almeida de Freitas\\
+Pontifical Catholic University of Rio de Janeiro\\
+\texttt{pedropva@telemidia.puc-rio.br}
+\end{flushright}
+
+
+\date{}
+
+% $~$ \\
+
+\thispagestyle{empty}
+
+%
+%\input{body/00_Abstract_Keywords.tex}
+
+% \newpage
+\pagenumbering{roman} \setcounter{page}{-1}
+
+% TABLE OF CONTENTS -  OPTIONAL
+%\newpage
+\tableofcontents
+
+%% BEGIN DOCUMENT
+\newpage
+\pagenumbering{arabic} \setcounter{page}{1}
+
+
+%%% Sections....
+\input{body/00_Abstract_Keywords.tex}
+\input{body/01_Introduction.tex}
+\input{body/02_Related_Work.tex}
+\input{body/03_Theory.tex}
+\input{body/04_Method.tex}
+\input{body/05_Discussion.tex}
+\input{body/06_Final_Considerations.tex}
+
+\newpage
+% \addcontentsline{toc}{section}{Referências}
+\addcontentsline{toc}{section}{References}
+
+\bibliographystyle{sbc}
+% \bibliographystyle{plainnat}
+\bibliography{sbc-template}
+
+\input{body/07_Appendix.tex}
+\end{document}

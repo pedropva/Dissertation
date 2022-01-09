@@ -1,0 +1,24 @@
+\section{Contributions and Results so Far}
+\label{sec:contrib}
+
+By the the time of this writing, two papers have already been published in  conferences: \cite{2019NSFWbaseline}, and \cite{2020PornDetectionSBIE}, and we have finished the construction of the large scale dataset for sensitive content detection, to be published soon.
+
+\section{Expected contributions}
+\label{sec:expdcontrib}
+
+In this work we propose a multi-modal approach to sensitive content detection in video. Our model uses both audio and visual features. It uses pre-trained convolutional neural networks that are relatively simple to understand, and  applies a late-fusion feature method, which is simpler than the early fusion approach since we use a single model to classify both features.
+
+We intend to evaluate our models by testing on other known datasets. We expect to validate this simple approach while maintaining a similar performance to the existing methods.
+
+It is important to note that our method is not focused on mobile platforms, therefore memory and disk space are not major constraints. 
+
+It is worth mentioning that our results are not directly comparable to existing ones since our definitions of violence do not match the ones used in other works. 
+
+\section{Future Work}
+\label{sec:future}
+
+
+% após o fim desse trabalho é claro que ainda muitos locais em nossa abordagem para melhoria, mas somente com uma extraçaõ de features generalista e baselines, já conseguimos alcançar abordagens estado da arte
+%imagino que a partir daqui, o sentido do progresso do trabalho é diminuir e simpleificar a extração de features, ao mesmo tempo especializando, ou seja, treinando a extração de features para a prórpia tarefa
+         
+Test if a sequential model can outperform a non-sequential model in specific cases that demand long term memory, such as long videos with very small sensitive scenes.
