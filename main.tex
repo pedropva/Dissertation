@@ -1,126 +1,313 @@
-\documentclass[11pt]{article}
+%% -*- coding: utf-8; -*-
 
-\usepackage[pdftex]{graphicx} % OU
-% \usepackage[dvips]{graphicx}
+% DEFESA PEDRO - Principais questões levantadas pela banca
 
-% \usepackage[round]{natbib}
-\usepackage{adjustbox,array,url,hyperref,multirow,makecell,tabularx,caption,subcaption}
-% \usepackage{url,hyperref,multirow,makecell}
-\usepackage[table]{xcolor}
-\usepackage{lipsum}
-\usepackage{cite}
-\usepackage{amsfonts}
-%\usepackage[latin1]{inputenc}
-\usepackage[utf8]{inputenc}
-%\usepackage[brazilian,brazil]{babel}
-%\usepackage{apacite}
-%\usepackage{float}
-\usepackage{booktabs}
-\usepackage{multirow}
+% 1) Prof Sandra
+
+% - Não achou clara a motivação do pipeline
+% - Sugeiriu categorização dos trabalhos relacionados e tabela comparativa
+% - Motivar melhor o PCA e extrair a variância
+% - Melhorar a explicação da 1a abordagem
+% - Usar como base o artigo "Datasheets for Datasets" para documentar como foi montado o dataset e como ele deve ser usado
+% - Fazer análises sobre a importância do áudio e do vídeo e ter conclusões sobre o uso em conjunto
+
+
+% 2) Alberto
+
+% - Colocar os agradecimentos microsoft e RNP explicando
+% - não são 6 experimentos e sim análises
+
+
+% 3) Julio
+
+% - Extração de features para áudio: por que usar CNNs? 
+% - Justificar melhor o PCA
+% - Tabela comparativa dos trabalhos relacionados
+% - un unicco trabalho de redes recorrents. Testar GRU (?)
+% - COmo vai fazer a análise dos erros? 
+% - Explicabilidade (?)
+
+
+\documentclass[phd,american]{ThesisPUC}
+
+%---------- Math ----------%
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{bbm}
+%\usepackage{ulem}
+%---------- Floting ----------%
+\usepackage{float}
+% ---------- References ----------%
+%\usepackage[sort&compress,round,comma,numbers]{natbib}
+%\usepackage{natbib}
+\input{latex_helper}
+%---------- Algorithm ----------%
+\input{conf_alg}
+%---------- Tables ----------%
 \usepackage{multicol}
-\usepackage{enumerate}
-\usepackage[shortlabels]{enumitem}
-
-\usepackage{todonotes}
-\newcommand{\pmendes}[1]{\color{blue}\textbf{paulo says: }#1\color{black}}
-\newcommand{\palan}[1]{\color{red}\textbf{alan says: }#1\color{black}}
-\newcommand{\pdsm}[1]{\color{green}\textbf{daniel says: }#1\color{black}}
-
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{tabularx}
+%---------- Images ----------%
+%\usepackage{subfigure}
+%---------- TiKz ----------%
+\usepackage{threeparttable}
+\usepackage{standalone}
+\usepackage{xcolor}
 \usepackage{tikz}
-\usetikzlibrary{
-  angles,
-  arrows,
-  arrows.meta,
-  calc,
-  intersections,
-  positioning,
-  quotes,
-  shapes.geometric,
-  through,
+\usepackage{psfrag,epsf}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{soul}
+%----------citation------------%
+%\usepackage{apacite}
+
+%-----------color-----------------%
+\definecolor{dkblue}{rgb}{0,0,.6}
+\definecolor{turquoise}{rgb}{0.25,0.87,0.82}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{dkred}{rgb}{0.7,0,0}
+\definecolor{indigo}{rgb}{0.294, 0, 0.51}
+\definecolor{cyan}{rgb}{0, 0.70, 0.70}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{black}{rgb}{0,0,0}
+
+\newcommand{\pva}[1]{\color{red}\textbf{TODO: }#1\color{black}}
+%\pagestyle{plain}
+
+
+%Para o código em EPL
+\lstdefinestyle{EPLStyle}{
+  numbers=left,
+  numberstyle=\footnotesize\ttfamily,
+  language=SQL,
+  frame=tblr,
+  aboveskip=0mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{dkgreen},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+  %Adiciona as keywords específicas da EPL Esper
+  morekeywords={after, at, context, current_timestamp,  define, distinct, every, first, grouping, grouping_id, hour, hours, initiated, inner, instanceof, irstream, is, istream, last, match_recognize,  measures, min, minute, minutes, microsecond, microseconds, millisecond, milliseconds, msec, new, offset, output, partition, pattern, rstream, sec, second, seconds, sets, some, snapshot, sql, start, terminated, then, until, usec, using, variable, weekday, when, while, window, schema},
+%
+  frameround=tttt,
 }
-\tikzset{
-  x=0em,
-  y=0em,
-  node distance=1.2em,
-  >=stealth',
+
+\graphicspath{{images/}}
+
+% ---------- Cover ----------%
+% Adjust the advisor's title according to gender(Prof. or Prof$^{\text{a}}$.)
+\author{Pedro Vinicius Almeida de Freitas}
+\authorR{Freitas, Pedro Vinicius Almeida de}
+\advisor{Sérgio Colcher}{Prof.}
+\advisorR{Colcher, Sérgio}
+
+% This thesis will use colored figures, this goes in the catalographic sheet
+\usecolour{true}
+\title{Detecção de Conteúdo Sensível em Video com Deep Learning}
+
+\titleuk{Sensitive Content Detection in Video with Deep Learning}
+
+\day{16$^{th}$}
+\month{Febuary}
+\myyear{2022}
+
+% CDD is the registry number of the area, given by the library. Our area (informatics) is 004.
+\city{Rio de Janeiro}
+\CDD{004}
+\department{Informática}
+\program{Informática}
+\school{Centro Técnico Científico}
+\university{Pontifícia Universidade Católica do Rio de Janeiro}
+\uni{PUC-Rio}
+
+%---------- Jury ----------%
+
+% Internal jury members are declared with \jurymember{name}{title}{department}{university}
+% external jury members are declared with \extjurymember{name}{title}{university}
+\jury{
+% TODO
+\pva{PREENCHER BANCA}
+%   \jurymember{Alberto Barbosa Raposo}{Prof.}{Departamento de Informática}{PUC-Rio}
+%   \extjurymember{}{Dr.}{Disney Research}
 }
 
-\newcommand*\rot[1]{\rotatebox{90}{#1}}
+%---------- Front letters ----------%
+\resume
+{
+Bachelor's degree in Computer Science at Federal University of Maranhão (UFMA) in 2019.
+}
 
-\newtheorem{proposition}{Proposition}
-\newtheorem{lemma}{Lemma}
-\newtheorem{theorem}{Theorem}
+\acknowledgment
+{
+\noindent
+Thanks
+% Thanks to my advisor Prof. Sérgio Colcher for his guidance and support in this journey.
+% Thanks to my family for the endless support.
+% Thanks to my friends from TeleMídia Lab, for their friendship and support. To all colleagues, faculty and staff of the PUC Rio Department of Informatics for the fellowship, learning and support.
+% This study was financed in part by the Coordenação de Aperfeiçoamento de Pessoal de Nível Superior - Brasil (CAPES) - Finance Code 001.
+}
+% Abstract and Keywords
+\input{body/00_Abstract_Keywords.tex}
 
-\newcommand{\CQD}{\mbox{\rule[0pt]{1.5ex}{1.5ex}}\medskip}
-\newcommand{\M}{\mathcal{M}}
+% WARNING
+% The epigraph, if present, must come before the first chapter, always.
+% There is a list of abreviations (abrevs.tex) which is included automatically in the ThesisPUC.cls, and is optional, comment the \include{abrevs} line if you do not wish to included it.
+% Rationale: In the original template, the list of abreviations came before the epigraph, which caused problems with the university library, thus I've included it in the cls file.
+% TODO: Declare a boolean option in the ThesisPUC.cls class in order to selectively include the abreviations list.
 
-\setlength{\oddsidemargin}{0.5cm} \setlength{\textwidth}{15cm}
-\setlength{\topmargin}{-1.5cm} \setlength{\textheight}{22.3cm}%{24.7cm}
-
-\usepackage{pdfpages}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-\LARGE
+\input{body/01_Introduction}
+\input{body/02_Related_Work}
+\input{body/03_Theory}
+\input{body/04_Dataset}
+\input{body/05_Method}
+\input{body/06_Results_and_Discussion}
+\input{body/07_Conclusions}
+
+\arial
+\bibliography{references}
+
+% Apendix chapters below.
+\normalfont
+\appendix
+\input{body/08_Appendix}
+
+\bibliographystyle{bibstyles/IEEEtran}
+
+\end{document}
+% \documentclass[11pt]{article}
+
+% \usepackage[pdftex]{graphicx} % OU
+% % \usepackage[dvips]{graphicx}
+
+% % \usepackage[round]{natbib}
+% \usepackage{adjustbox,array,url,hyperref,multirow,makecell,tabularx,caption,subcaption}
+% % \usepackage{url,hyperref,multirow,makecell}
+% \usepackage[table]{xcolor}
+% \usepackage{lipsum}
+% \usepackage{cite}
+% \usepackage{amsfonts}
+% %\usepackage[latin1]{inputenc}
+% \usepackage[utf8]{inputenc}
+% %\usepackage[brazilian,brazil]{babel}
+% %\usepackage{apacite}
+% %\usepackage{float}
+% \usepackage{booktabs}
+% \usepackage{multirow}
+% \usepackage{multicol}
+% \usepackage{enumerate}
+% \usepackage[shortlabels]{enumitem}
+
+% \usepackage{todonotes}
+% \newcommand{\pva}[1]{\color{blue}\textbf{TODO: }#1\color{blue}}
+
+% \usepackage{tikz}
+% \usetikzlibrary{
+%   angles,
+%   arrows,
+%   arrows.meta,
+%   calc,
+%   intersections,
+%   positioning,
+%   quotes,
+%   shapes.geometric,
+%   through,
+% }
+% \tikzset{
+%   x=0em,
+%   y=0em,
+%   node distance=1.2em,
+%   >=stealth',
+% }
+
+% \newcommand*\rot[1]{\rotatebox{90}{#1}}
+
+% \newtheorem{proposition}{Proposition}
+% \newtheorem{lemma}{Lemma}
+% \newtheorem{theorem}{Theorem}
+
+% \newcommand{\CQD}{\mbox{\rule[0pt]{1.5ex}{1.5ex}}\medskip}
+% \newcommand{\M}{\mathcal{M}}
+
+% \setlength{\oddsidemargin}{0.5cm} \setlength{\textwidth}{15cm}
+% \setlength{\topmargin}{-1.5cm} \setlength{\textheight}{22.3cm}%{24.7cm}
+
+% \usepackage{pdfpages}
+
+% \begin{document}
+
+% \LARGE
+
+% % \bigskip
+
+% %% TITLE
+% \begin{center}
+% {\bf Sensitive Content Detection in Video with Deep Learning
+% \Large
+% \\Dissertation}
+% \end{center}
+
 
 % \bigskip
+% \normalsize
 
-%% TITLE
-\begin{center}
-{\bf Sensitive Content Detection in Video with Deep Learning
-\Large
-\\Dissertation}
-\end{center}
+% \begin{flushright}
 
-
-\bigskip
-\normalsize
-
-\begin{flushright}
-
-Pedro Vincius Almeida de Freitas\\
-Pontifical Catholic University of Rio de Janeiro\\
-\texttt{pedropva@telemidia.puc-rio.br}
-\end{flushright}
+% Pedro Vincius Almeida de Freitas\\
+% Pontifical Catholic University of Rio de Janeiro\\
+% \texttt{pedropva@telemidia.puc-rio.br}
+% \end{flushright}
 
 
-\date{}
+% \date{}
 
-% $~$ \\
+% % $~$ \\
 
-\thispagestyle{empty}
+% \thispagestyle{empty}
 
-%
-%\input{body/00_Abstract_Keywords.tex}
+% %
+% %\input{body/00_Abstract_Keywords.tex}
+
+% % \newpage
+% \pagenumbering{roman} \setcounter{page}{-1}
+
+% % TABLE OF CONTENTS -  OPTIONAL
+% %\newpage
+% \tableofcontents
+
+% %% BEGIN DOCUMENT
+% \newpage
+% \pagenumbering{arabic} \setcounter{page}{1}
+
+
+% %%% Sections....
+% \input{body/00_Abstract_Keywords.tex}
+% \input{body/01_Introduction.tex}
+% \input{body/02_Related_Work.tex}
+% \input{body/03_Theory.tex}
+% \input{body/04_Method.tex}
+% \input{body/05_Discussion.tex}
+% \input{body/06_Final_Considerations.tex}
 
 % \newpage
-\pagenumbering{roman} \setcounter{page}{-1}
+% % \addcontentsline{toc}{section}{Referências}
+% \addcontentsline{toc}{section}{References}
 
-% TABLE OF CONTENTS -  OPTIONAL
-%\newpage
-\tableofcontents
+% \bibliographystyle{sbc}
+% % \bibliographystyle{plainnat}
+% \bibliography{sbc-template}
 
-%% BEGIN DOCUMENT
-\newpage
-\pagenumbering{arabic} \setcounter{page}{1}
-
-
-%%% Sections....
-\input{body/00_Abstract_Keywords.tex}
-\input{body/01_Introduction.tex}
-\input{body/02_Related_Work.tex}
-\input{body/03_Theory.tex}
-\input{body/04_Method.tex}
-\input{body/05_Discussion.tex}
-\input{body/06_Final_Considerations.tex}
-
-\newpage
-% \addcontentsline{toc}{section}{Referências}
-\addcontentsline{toc}{section}{References}
-
-\bibliographystyle{sbc}
-% \bibliographystyle{plainnat}
-\bibliography{sbc-template}
-
-\input{body/07_Appendix.tex}
-\end{document}
+% \input{body/07_Appendix.tex}
+% \end{document}

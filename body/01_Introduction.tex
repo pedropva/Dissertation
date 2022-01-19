@@ -1,32 +1,8 @@
-% DEFESA PEDRO - Principais questões levantadas pela banca
+%%% -*- coding: utf-8 -*-
+\newpage
 
-% 1) Prof Sandra
-
-% - Não achou clara a motivação do pipeline
-% - Sugeiriu categorização dos trabalhos relacionados e tabela comparativa
-% - Motivar melhor o PCA e extrair a variância
-% - Melhorar a explicação da 1a abordagem
-% - Usar como base o artigo "Datasheets for Datasets" para documentar como foi montado o dataset e como ele deve ser usado
-% - Fazer análises sobre a importância do áudio e do vídeo e ter conclusões sobre o uso em conjunto
-
-
-% 2) Alberto
-
-% - Colocar os agradecimentos microsoft e RNP explicando
-% - não são 6 experimentos e sim análises
-
-
-% 3) Julio
-
-% - Extração de features para áudio: por que usar CNNs? 
-% - Justificar melhor o PCA
-% - Tabela comparativa dos trabalhos relacionados
-% - un unicco trabalho de redes recorrents. Testar GRU (?)
-% - COmo vai fazer a análise dos erros? 
-% - Explicabilidade (?)
-
-\section{Introduction}
-\label{sec:introduction}
+\chapter{Introduction}
+\label{chap:introduction}
 
 % INTRO SLR
 The amount of multimedia content on the internet is increasing each year.
@@ -85,7 +61,7 @@ There are four scenes with safe content on the top row, and four scenes with sen
 %Then we evaluate the best model in a dataset created with videos sampled from the Brazilian RNP (National Research Network) repository video@RNP.\footnote{\url{https://www.video.rnp.br}}
 %In our experimentation, the best model achieves a recall of 94.4\% and an F1-score of 95.6\% for pornography class.
 
-Other works, such as \cite{moreira2019multimodal}, share our motivations and objectives, as described in Section \ref{sec:related}. However, most of them do not use both audio and image for classification. Some use hand-crafted feature extraction methods instead of more recent CNNs that has been showing great potential in video recognition and classification.
+Other works, such as \cite{moreira2019multimodal}, share our motivations and objectives, as described in Section \ref{chap:related}. However, most of them do not use both audio and image for classification. Some use hand-crafted feature extraction methods instead of more recent CNNs that has been showing great potential in video recognition and classification.
 
 Our work uses two CNNs: one to extract image sequence features and the other to extract audio features.
 As we get one feature vector for each second of the video, we can approach the feature classification task as a time series classification, using a Recurrent Neural Network (RNN) as baseline. We also can combine those features to create a single feature vector for the entire video, which then is used as the input for other baseline classifiers.
@@ -147,11 +123,13 @@ The main contributions of this work are:
 Although the largest dataset for this task by our knowledge, our dataset is not manually labeled, which begs the question if it is noise-less enough for any training and evaluation in this task.  
 Our intent is not to replace the 2k-pornography dataset, but to be a complement it, it still is the gold standard for pornography detection, in our dataset the videos were not manually labeled by a human, so we need to validate this dataset.
 
-To perform this task, we created a large scale dataset, extracted features from this dataset using an generalist and well known feature extraction for video classification method, and performed experiments such as compare baseline classification models, compare which type of classification model (sequential or not) performs best, and compared the importance of audio and image features. further detailed in Section \ref{sec:approach}.
+To perform this task, we created a large scale dataset, extracted features from this dataset using an generalist and well known feature extraction for video classification method, and performed experiments such as compare baseline classification models, compare which type of classification model (sequential or not) performs best, and compared the importance of audio and image features, further detailed in Chapter \ref{chap:method}.
 
-This dissertation proposal is organized as follows:
-In Section \ref{sec:related} we discuss some of the related work.
-Then, in Section \ref{sec:approach}, we detail the proposed method to detect sensitive content in videos.
-We present our dataset and metrics in Sections \ref{sec:dataset} and \ref{sec:metrics}, respectively.
-Then, we propose experiments to evaluate our models in Section \ref{sec:experiments}.
-Finally, in Sections \ref{sec:contrib},~\ref{sec:expdcontrib} and \ref{sec:schedule} we present, respectively, our currently already achieved contributions, our still expected contributions, and our schedule.
+This dissertation is organized as follows:
+In Chapter \ref{chap:related} we discuss some of the related work.
+\pva{TALVEZ INCLUIR THEORY?}
+Then, in Chapter \ref{chap:method}, we detail our dataset and the proposed method to detect sensitive content in videos.
+We present our dataset and metrics in Chapter \ref{chap:dataset}.
+Then, we evaluate and analyse our baseline models in Chapter \ref{chap:results}.
+Finally, in Chapter \ref{chap:conclusions} we present, our conclusions, currently published papers, and future work.
+Additionaly, in Appendix \ref{chap:appendix}, we show complementary data, such as tables, distributions and a dataset datasheet.

@@ -1,5 +1,32 @@
-%% copy of "apalike" for SBC (no comma before year in citation label)
-
+%%% ====================================================================
+%%%  @BibTeX-style-file{
+%%%     author          = "Alan Rogers",
+%%%     version         = "1.1",
+%%%     date            = "June 27, 1992",
+%%%     filename        = "apa.bst",
+%%%     address         = "Dept of Anthropology, University of Utah,
+%%%                       Salt Lake City, UT 84112",
+%%%     checksum        = "21129 1130 3156 23582",
+%%%     email           = "rogers@anthro.utah.edu",
+%%%     supported       = "no",
+%%%     docstring       = "Adapted from apalike.bst.
+%%%                        Usage: \documentstyle[astron]{...}
+%%%                          ...
+%%%                          \bibliographystyle{apa}
+%%%                          ...
+%%%                        This file incorporates features of Sake J.
+%%%                        Hogeveen's `astron.bst' into`apalike.bst'.
+%%%                        The \documentstyle command above invokes
+%%%                        Hogeveen's `astron.sty', which must be in
+%%%                        TeX's search path.
+%%%
+%%%                        The modifications implement `\cite*{}', which
+%%%                        generates references in short form.  For
+%%%                        example, `Rogers \cite*{...}' would produce
+%%%                        `Rogers (1992)'."
+%%%  }
+%%% ====================================================================
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BibTeX `apalike' bibliography style (24-Jan-88 version)
 % Adapted from the `alpha' style, version 0.99a; for BibTeX version 0.99a.
 % Copyright (C) 1988, all rights reserved.
@@ -891,21 +918,21 @@ FUNCTION {editor.key.label}
   if$
 }
 
-FUNCTION {calc.label}
+FUNCTION {calc.label}      % this function came from ASTRON.BST (ARR)
 { type$ "book" =
   type$ "inbook" =
   or
     'author.editor.key.label
     { type$ "proceedings" =
-	'editor.key.label			% apalike ignores organization
-	'author.key.label			% for labeling and sorting
+        'editor.key.label                       % apalike ignores organization
+        'author.key.label                       % for labeling and sorting
       if$
     }
   if$
-  " "							% these three lines are
-  *							% for apalike, which
-  year field.or.null purify$ #-1 #4 substring$		% uses all four digits
-  *
+  "\protect\astroncite{" swap$ * "}{"                   % these three lines are
+  *                                                     % for apalike, which
+  year field.or.null purify$ #-1 #4 substring$          % uses all four digits
+  *                       % the mathing closing "}" comes in at the reverse.pass
   'label :=
 }
 
@@ -1044,12 +1071,12 @@ FUNCTION {forward.pass}
   if$
 }
 
-FUNCTION {reverse.pass}
+FUNCTION {reverse.pass}       % this function came from ASTRON.BST (ARR)
 { next.extra "b" =
     { "a" 'extra.label := }
     'skip$
   if$
-  label extra.label * 'label :=
+  label extra.label * "}" * 'label :=
   extra.label 'next.extra :=
 }
 

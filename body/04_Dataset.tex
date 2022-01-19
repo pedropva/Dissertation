@@ -1,105 +1,13 @@
-\section{Method and experimentation}
-\label{sec:method}
-In this section we detail our method for sensitive content detection in video. We split our approach into three parts: feature extraction, feature fusion and feature classification, as illustrated in Figure \ref{fig:model}.
-\begin{figure*}[!ht]
-    \centering
-    \includegraphics[width=0.9\textwidth]{img/model-2.png}
-    \caption{Bimodal architecture for NSFW video classification.}
-    \label{fig:model}
-    \vspace{-1em}
-\end{figure*}
+%%% -*- coding: utf-8 -*-
+\newpage
 
-In the feature extraction stage, firstly we split the frames and audio from the video; then, for each media, we use a CNN to extract the features (or embeddings) from each simultaneous video segment. In the second stage, Feature Fusion, we concatenate both audio and frame features. If the classification model is not sequential, we also aggregate the features in this stage. Finally, in the feature classification stage we feed one of the classification models to be experimented with.
+\chapter{Sensitive Content Dataset}
+\label{chap:dataset}
 
-\subsection{Video Embeddings Extraction}
-\label{subsec:video_features}
+In this Chapter, we present our \textit{dataset} and the metrics to evaluate models in this dataset.
 
-CNNs tend to learn low-level features (\textit{e.g.}, in the visual domain: edges, corners, contours) at their first layers. At the intermediate and final layers, the combination of these features helps to extract more complex features, resulting in a vector of continuous values, referred to as \textit{embeddings}, that might be used for classification and other tasks. In this work, we use two benchmark CNNs to extract both image and audio \textit{embeddings} by using a transfer learning technique~\cite{tan2018survey}.
-
-
-
-%Afterwards, we apply PCA (+ whitening) to reduce feature dimensions to 1024, followed by quantization (1 byte per coefficient).
-%These two compression techniques reduce the size of the data by a factor of 8. The mean vector and covariance matrix for PCA was computed on all frames from the Train partition. We quantize each 32-bit float into 256 distinct values (8 bits) using optimally computed (non-uniform) quantization bin boundaries. We confirmed that the size reduction does not significantly hurt the evaluation metrics. In fact, training all baselines on the full-size data (8 times larger than what we publish), increases all evaluation metrics by less than 1%.
-
-\todo{explicar pq escolheu as cnns (youtube) e qual foram os paramretros usados (pca e hiperparametros)}
-By using the feature extraction method created for the Youtube-8m benchmark, we can test an feature extraction method that is powerful enough to represent features that can be in multiple tasks, such as multi-label video classification, video recommendation, and human activity recognition.
-
-"Since the video-level representations are unsupervised (extracted independently of the labels), these representations are far less specialized to the labels associated with the current dataset, and can generalize better to new tasks or video domains."~\cite{abu2016youtube}
-
-In order to validate our dataset, we used the same feature extraction method used in the Youtube-8m dataset challenges~\cite{abu2016youtube}, both networks were pre-trained and frozen and they were not retrained for application sensitive content classification. Which gives future works an opportunity to develop even more efficient and smaller feature extraction networks for this specific task.
-
-
-To generate image frame features and audio features we decode each video at approximately 1 frame-per-second and feed an InceptionV3  network~\cite{szegedy2016rethinking} pre-trained on the ImageNet\footnote{\url{http://www.image-net.org/}} dataset.
- 
-We also make use of a AudioVGG~\cite{hershey2017cnn} network with pre-trained weights in the Audioset\footnote{\url{https://research.google.com/audioset/}} dataset to extract the audio embeddings. Each of these CNNs were used as published by their authors; the only modification was the removal of classification layers in both CNNs to obtain their respective embeddings.
-
-Next, we apply Principal Component Analysis (PCA)~\cite{wold1987principal} to each of the outputs to reduce the dimensions of both embeddings and to generate feature vectors of size 1024 and 128 for frame and audio embeddings respectively.
-%DETALHAR MAIS AQUI DE QTO PRA QTO O PCA REDUZ
-
-\subsection{Feature Fusion}
-\label{subsec:feature_fusion}
-
-Once we have the features from both image and audio, we should make a decision about which method is best to fuse the information from these different domains. Snoek et al. \cite{snoek2005featurefusion} presents two main strategies for information fusion in semantic video analysis: \emph{Early fusion} methods, which works directly with the extracted features, and \emph{Late fusion} methods, which operates on classification outputs from specialized models.
-%\todo{For a more recent survey about data fusion and multimedia retrieval, please refer to \cite{jiang2013features}.}
-In this work, because we have high abstraction level features, we opted to investigate the most simple approach, which is to use a single model on the concatenated features from both media inputs.
-
-Specifically, we concatenate both image and audio embeddings extracted in the current frame and audio window in order to compose the final embeddings as a sequence of the same size of the number of seconds of the video. After this concatenation, each time-step has 1,152 features: 128 audio features and 1024 frame features.
-
-Notice that with this approach, the video is transformed into a time series, and to use it in non-sequential models (\textit{e.g.}~SVM, KNN, and MLP) we need to turn this sequence into a single feature vector that represents the whole video. In our setting, we did that by taking the average, median, standard deviation, min, and max values for each feature to represent the entire video. In summary, we turn the sequence of features with size $n$ and shape $n$ by 1,152 into a single feature with shape 1 by 5,760.
-
-\subsection{Classifiers}
-\label{subsec:classifiers}
-
-% \todo[inline]{porque foi escolhidos esses modelos de classficação, qual a relação deles com o nosso tipo de dado de vídeo.}
-
-For the feature classification task, we will investigate both sequential models (which use the extracted embeddings in a time series format), and non-sequential ones (which use a single aggregated embeddings vector).
-We want to experiment with both approaches in order to investigate if a more compact format, such as the single embeddings vector, can yield results at least as good (or even better) than the full feature sequence data.
-%Furthermore, we can test if a sequential model can outperform a non-sequential model in specific cases that demand long term memory, such as long videos with very small sensitive scenes.
-As an example, one can think of a long video that has a pornographic scene in one second out of its entirety. 
-In a non-sequential representation of the extracted features, this short pornographic fragment could be left ``hidden'' among the other non-pornographic frames of the video, as illustrated in Figure \ref{fig:model-non-sequence}.
-\begin{figure*}[!ht]
-    \centering
-    \includegraphics[width=0.9\textwidth]{img/model-non-sequence.png}
-    \caption{Sequential features with aggregation, the sensitive scene (red) might vanish among the the other scenes during aggregation.}
-    \label{fig:model-non-sequence}
-    \vspace{-1em}
-\end{figure*}
-In a sequential representation, although time series classifiers usually output a prediction after reading the entire sequence, the embedding vectors of each second of the video would not be aggregated and thus could be analysed section by section, as illustrated in Figure \ref{fig:model-sequence}.
-
-\begin{figure*}[!ht]
-    \centering
-    \includegraphics[width=0.9\textwidth]{img/model-sequence.png}
-    \caption{Sequential features with no aggregation. In a output after reading the entire sequence, this can also be susceptible to information vanishing.}
-    \label{fig:model-sequence}
-    \vspace{-1em}
-\end{figure*}
-Although a sequential representation contains possibly much more redundant data than the non-sequential one, it could give the sequential classification model an important edge of detail over the less granular non-sequential ones.
-% To do the feature classification task, we experimented four well known classification mohave dels, one using extracted video features in the time series format, and three that use a single aggregated feature vector.
-
-For the sequential classification model, we chose the Long Short-Term Memory (LSTM)\cite{hochreiter1997long} networks.
-It has been a commonly used time series classification baseline model. %\todo{mayber say we'll test GRUs?}
-
-For the non-sequence models, we chose Support Vector Machines (SVM)~\cite{cortes1995support}, K-Nearest Neighbors (KNN)~\cite{peterson2009k}, and Multilayer Perceptron (MLP)~\cite{haykin2009neural}.
-Among all of the experimented models, the \textit{Support Vector Machine (SVM)} is the most used in the literature.
-% \begin{enumerate}[leftmargin=*]
-% \item 
-It is a classification model in which the data is mapped into a higher dimension input space, where an optimal separating hyper-plane is constructed.
-% These decision surfaces are found by solving a linearly constrained quadratic programming problem.
-% \item 
-The second model, \textit{K-Nearest Neighbors (KNN)} uses distance measure between training samples so that the k-nearest neighbors always belong to the same class, while samples from different classes are separated by a large margin. 
-It was chosen because it used also by related work, although it is a simple classification method.
-% \item 
-The third model is the \textit{Multilayer-perceptron (MLP)}, which contains layers of nodes: an input layer, an output layer and various hidden layers in between. 
-This one was selected because it is also commonly used as a final classifier on deep neural networks.  
-% The number of layers used is problem dependent, as is the number of nodes in each hidden layer.
-% The weights are adjusted by local optimization using a set of feature vectors so that the network produces the optimal expected output.
-% \item 
-%Lastly, \textit{Long short-term memory (LSTM)}, different than the feed-forward neural networks, process the entire sequences of data using feedback connections.
-% \end{enumerate}
-
-In next the Section, we present the \textit{dataset} created to train and evaluate these classification models.
-
-\section{Dataset}\label{sec:dataset}
+\section{The Sensitive Content Dataset - 120k}\label{sec:dataset}
+\pva{confirmar se vou usar 120k mesmo (aqui e no datasheet)}
 % Falar do sampling inicial, da presentatividade dos sets
 % falar do balanceamento e do sampling do conjunto de teste
 % Falar das talbeas no texto
@@ -165,7 +73,7 @@ Tag coverage          & 65392      & 51011       \\
 Tag coverage (\%)     & 96,9862    & 85,5157     \\
 \end{tabular}
 \end{table}
-% \subsection{SFW Videos}\label{sec:safe_videos}
+% \section{SFW Videos}\label{sec:safe_videos}
 
 For \textit{safe content}, we extracted 50,988 videos from Youtube8M\footnote{\url{https://research.google.com/youtube8m}}~\cite{abu2016youtube}. We chose this dataset because of the size of the dataset (8 million videos) and because of the wide variety of video classification challenges it supports.
 
@@ -176,13 +84,15 @@ We also included 8,663 videos collected from Youtube, hereby refered as cherry-p
 
 % We also included the Cholec80 \cite{twinanda2016endonet} dataset, it contains 80 videos of cholecystectomy surgeries performed by 13 surgeons. All videos from the Cholec80 dataset were labeled as safe, since videos of surgery are usual in an educational context.
 
-% \subsection{NSFW Videos}\label{sec:nsfw_videos}
+% \section{NSFW Videos}\label{sec:nsfw_videos}
 
-For \textit{sensitive content}, we collected pornography and violent videography (thereafter referred to as \textit{gore}) from websites. For the porn category, we collected 54,549 videos from XVideos\footnote{\url{https://info.xvideos.com/db}}. We chose this source because of the database size (7 million videos) and because of the amount and variety of annotations. In this database, each video has one main tag, totalling 70 main tags, and none or many subtags (user-created). To select the videos in this database, we distributed videos in these tags to maintain a proportion equal to the original XVideos database. In particular, to prevent lower-quantity tags from disappearing, we have defined a minimum of 10 pornographic videos for each tag. 
+For \textit{sensitive content}, we collected pornography and violent videography (thereafter referred to as \textit{gore}) from websites. For the porn category, we collected 54,549 videos from XVideos\footnote{\url{https://info.xvideos.com/db}}. We chose this source because of the database size (7 million videos) and because of the amount and variety of annotations. In this database, each video has one main tag,\section{Analysis cases}\label{sec:experiments-discussion}
+
+ totalling 70 main tags, and none or many subtags (user-created). To select the videos in this database, we distributed videos in these tags to maintain a proportion equal to the original XVideos database. In particular, to prevent lower-quantity tags from disappearing, we have defined a minimum of 10 pornographic videos for each tag. 
 
 For the gore content, we used a web crawler to extract 2,356 gore videos from various websites dedicated to gore media, such as, BestGore\footnote{\url{https://www.bestgore.com/}} and GoreBrasil\footnote{\url{https://www.gorebrasil.com}}. 
 
-%\todo{o set de teste de gore n tem gore de verdade, incluir?}
+%\pva{o set de teste de gore n tem gore de verdade, incluir?}
 %For testing purposes we collected a separate group of 671 violent videos from youtube channel BustedLocals\footnote{\url{https://www.youtube.com/channel/UCpKimtjklYBgSKfSJrnXLRA}}
 \begin{table}
 \centering
@@ -334,57 +244,3 @@ Most related works use either F1-score ($\beta=1$) or F2-score ($\beta=2$) metri
 
 % in the case of pornographyfiltering, false-negative answers areworse than the false-positive ones. It is less prejudicial to wrongly denythe access to non-pornographic content, than to wrongly disclose por-nographic content. Hence, we can consider that a solution with higherF2measure is better, because it cares more about how many porno-graphic video seconds are really beingfiltered out (recall), instead ofhow many“supposedly”positive seconds are indeed pornographic(precision)
 In this work, the F2-score represents an overall performance metric, while the precision and recall metrics can give insights on what the classifier model is doing better and what to improve. We chose the weighted F2-score as our main evaluation metric because when detecting sensitive content it is more important to predict a truly sensitive video than to predict a safe video as sensitive.
-
-\section{Proposed Experiments}\label{sec:experiments}
-
-
-In our proposed experiments, we evaluate the performances of baseline classifiers over the video \textit{embeddings} that were extracted from our dataset, described in Section \ref{sec:dataset}. Then choose the best performing classifier during validation stage and test its performance on the \textit{test sets}.  
-%\todo{maybe add a image for the process?}
-We designed a set of experiments that might help us find insights and assess the performance and shortcomings of our approach.  
-
-% In this work our goal is to create and validate a approach for sensitive content detection in video.
-
-% Some of the questions we aim to answer with this work are:
-% \begin{enumerate}
-%     \item How does this approach compares with the related work?
-%     \item What is the impact of also using audio in the model's performance?
-%     \item Can the same model have a performance higher than 90\% on both pornography and violence detection tasks?
-% \end{enumerate}
-
-Our objective with these experiments is to attest the quality of our approach at detecting sensitive content on video.
-%, while also answering our research questions, stated in Section \ref{sec:introduction}.
-% In this experiment, our objective is to attest to the quality of our video \textit{embeddings}.
- 
-% In the next subsections, we discuss the experiment setup, used metrics, and our findings. In Subsection \ref{subsec:config} we describe the training configuration for each model.
-% Next, in Subsection \ref{sec:metrics} we describe the evaluation metrics.
-% And finally, in Subsection \ref{subsec:results} we present our empirical findings.
-\begin{enumerate}[start=0,label={(\bfseries E\arabic*):}]
-\item The sensitive content detection task: This is the main experiment of this work, in this experiment we test the capabilities of our approach and the best performing classification model on our test subset.%\todo{maybe referenciar ao subset de teste do nosso dataset?}
-
-\item The pornography detection task: In this experiment we evaluate our approach and the best performing classification model on the pornography detection task using our test subset.
-
-\item The gore detection task: In this experiment we evaluate our approach and the best performing classification model on the gore detection task using our test subset.
-
-\item Test with training only on image features: In this experiment we evaluate our approach on the our test subset using the audio features only.
-
-\item Testing on the pornography-2k:  In this experiment we evaluate our approach on the pornography-2k dataset.
-
-\item Testing pornography audio only videos: In this experiment we evaluate our approach on the pornography-2k dataset using the audio features only.
-
-\item Testing on the gore test set: In this experiment we evaluate our approach on the gore test subset.
-
-\item Testing gore audio videos: In this experiment we evaluate our approach on the gore test subset using the audio features only.
-%\item Testing on the medical images set
-%\item esting MEDIAEVAL Violent Scenes Dataset
-\item Investigating misclassified videos in the test sets: In this experiment we search for insights on what videos our approach fails to correctly detect sensitive content.
-% \item sequence classification models vs non-sequence models
-\end{enumerate}
-
-Based on those experiments we established the following tasks for the completion of this work:
-
-\begin{enumerate}[start=0,label={(\bfseries T\arabic*):}]
-\item Dataset Collection (100\% Complete)
-\item Feature Extraction (100\% Complete)
-\item Dataset Preparation (50\% Complete)
-\item Model Training and Experimentarion (20\% Complete)
-\end{enumerate}

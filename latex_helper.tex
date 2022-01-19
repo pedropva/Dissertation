@@ -1,0 +1,338 @@
+% ---------------------------------------
+% author: Alan Livio
+% site: github.com/alanlivio/latex-helper-functions
+% ---------------------------------------
+
+% ----------------------------------------
+% work like layout
+% ----------------------------------------
+% \usepackage{wordlike}
+% \usepackage[big]{layaureo}
+
+% ----------------------------------------
+% ABNT like layout
+% ----------------------------------------
+% \usepackage{lmodern}
+% \setlength{\parskip}{0.2cm}
+% \setlength{\parindent}{1.3cm}
+% \usepackage{geometry}
+%  \geometry{
+%  a4paper,
+%  total={170mm,257mm},
+%  left=3cm,
+%  top=3cm,
+%  right=3cm,
+%  bottom=3cm
+%  }
+
+% ----------------------------------------
+% SmallCaps font
+% ----------------------------------------
+% \usepackage{fontspec}
+% \defaultfontfeatures{Mapping=tex-text}
+% \setmainfont[
+% SmallCapsFont = Fontin-SmallCaps.otf,
+% BoldFont = Fontin-Bold.otf,
+% ItalicFont = Fontin-Italic.otf
+% ]{Fontin.otf}
+
+% ----------------------------------------
+% language
+% ----------------------------------------
+\usepackage[brazilian, american]{babel}
+% \usepackage[portuguese]{babel}
+
+% ----------------------------------------
+% fonts
+% ----------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{amsmath,amssymb,amsfonts}
+
+% ----------------------------------------
+% tables
+% ----------------------------------------
+\usepackage{makecell}
+\usepackage{tabularx}
+\usepackage{multirow}
+%\usepackage[nottoc]{tocbibind}
+
+% ----------------------------------------
+% table custom cells
+% ----------------------------------------
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% ----------------------------------------
+% URL and hyperref
+% ----------------------------------------
+%\usepackage[hyphens]{url}
+%\usepackage{hyperref}
+%\hypersetup{hidelinks}
+
+% ----------------------------------------
+% URL color
+% ----------------------------------------
+% \definecolor{linkcolour}{rgb}{0,0.2,0.6}
+% \hypersetup{colorlinks,urlcolor=linkcolour, linkcolor=linkcolour}
+
+% ----------------------------------------
+% includegraphics
+% ----------------------------------------
+\usepackage{graphicx}
+
+% ----------------------------------------
+% includegraphics for larging image with subcaption
+% ----------------------------------------
+\usepackage{float}
+\usepackage{newfloat}
+\usepackage{subfloat}
+\usepackage{subcaption}
+
+% ----------------------------------------
+% itemize
+% ----------------------------------------
+\usepackage{enumitem}
+\SetEnumitemKey{mynosep}{noitemsep, nosep, topsep=0pt, partopsep=0pt, parsep=0pt, itemsep=0pt, leftmargin=*}
+\def\labelitemi{$-$}
+
+% ----------------------------------------
+% color
+% ----------------------------------------
+\RequirePackage{color}
+\usepackage{soulutf8}
+\usepackage{xcolor}
+\usepackage{multicol}
+
+\colorlet{light-gray}{gray!20}
+\usepackage{listings}
+\DeclareFloatingEnvironment[fileext=lst,placement={!htbp},name=Listing]{listing}
+
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{lightblue}{rgb}{0.0,0.0,0.9}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\definecolor{darkred}{rgb}{0.6,0.0,0.0}
+
+\renewcommand{\ttdefault}{pcr}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  columns=fullflexible,
+  showstringspaces=false,
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=none,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title  
+  commentstyle=\color{gray}\upshape
+}
+
+
+\lstdefinelanguage{XML}
+{
+  morestring=[s][\color{black}]{"}{"},
+  morestring=[s][\color{black}]{>}{<},
+  morecomment=[s]{<?}{?>},
+  morecomment=[s][\color{dkgreen}]{<!--}{-->},
+  stringstyle=\color{black},
+  identifierstyle=\color{darkgray}\bfseries,
+  keywordstyle=\color{black},
+  morekeywords={xmlns,xsi,noNamespaceSchemaLocation,type,id,x,y,source,target,version,tool,transRef,roleRef,objective,eventually}% list your attributes here
+}
+
+
+% ----------------------------------------
+% fixme
+% ----------------------------------------
+\usepackage[nomargin,inline]{fixme}
+\fxusetheme{color}
+% \fxsetup{draft}
+% \fxsetup{final}
+
+% ----------------------------------------
+% ref elements
+% ----------------------------------------
+\newcommand{\reffig}[1]{\figurename~\ref{#1}}
+\newcommand{\reftab}[1]{Table~\ref{#1}}
+\newcommand{\reflis}[1]{Listing~\ref{#1}}
+\newcommand{\refappen}[1]{Appendix~\ref{#1}}
+\newcommand{\refsec}[1]{Section~\ref{#1}}
+\newcommand{\refsubsec}[1]{subsection~\ref{#1}}
+
+% ----------------------------------------
+% xml tags
+% ----------------------------------------
+\newcommand{\xml}[1]{\texttt{<#1>}}
+\newcommand{\attr}[1]{\emph{#1}}
+
+% ----------------------------------------
+% compact section titles
+% ----------------------------------------
+% \usepackage[compact]{titlesec}
+% \titlespacing{\section}{0pt}{*0}{*0}
+% \titlespacing{\subsection}{0pt}{*0}{*0}
+% \titlespacing{\subsubsection}{0pt}{*0}{*0}
+
+% ----------------------------------------
+% for
+% ----------------------------------------
+\usepackage{forloop}
+
+% spacing control
+% ----------------------------------------
+% \setlength{\itemsep}{0pt}
+% \setlength{\parskip}{0pt}
+% \setlength{\parsep}{0pt}
+% \setlength{\abovecaptionskip}{1pt}
+% \setlength{\belowcaptionskip}{1pt}
+
+% ----------------------------------------
+% lipsum
+% ----------------------------------------
+\usepackage{lipsum}
+
+% ----------------------------------------
+% tree
+% ----------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{trees}
+
+% % ----------------------------------------
+% % minted listing inside tcolorbox
+% % ----------------------------------------
+% \usepackage{listings}
+% \usepackage{tikz}
+% \usepackage[many]{tcolorbox}
+% \usepackage{minted}
+% \tcbuselibrary{minted,breakable,skins,raster}
+% \newtcblisting[]{mintedlistingtcblisting}[1][!ht]{
+%   enhanced jigsaw,pad at break*=5mm,
+%   fontsize=\footnotesize
+%   colback=yellow!5,colframe=yellow!50!black,listing only,
+%   listing engine=minted,
+%   minted language=#1,
+%   minted options={fontsize=\footnotesize,breaklines,autogobble,linenos,numbersep=3mm},
+%   overlay={\begin{tcbclipinterior}\fill[red!20!blue!20!white] (frame.south west)
+%   rectangle ([xshift=5mm]frame.north west);\end{tcbclipinterior}}
+% }
+
+% ----------------------------------------
+% listing code inside tcolorbox
+% ----------------------------------------
+\usepackage{listings}
+\usepackage[many]{tcolorbox}
+\tcbuselibrary{listingsutf8}
+\newtcblisting[]{mytcblisting}[1][!ht]{
+  enhanced jigsaw,
+  enforce breakable,
+  pad at break*=1mm,
+  colback=black!2,
+  colframe=black!30,
+  top=1mm, bottom=1mm, left=0mm, right=0mm,
+  listing only,
+  coltitle=black,
+  % drop fuzzy shadow,
+  listing options={
+    % shape
+    xleftmargin=0pt, % 0 is default
+    xrightmargin=-4pt, % 0 is default
+    % frame ---
+    framesep=0pt,
+    aboveskip=-6pt,
+    belowskip=-6pt,
+    captionpos=b, % sets the caption position
+    % numbers ----
+    % numberstyle=\footnotesize\ttfamily,
+    numbers=left,
+    % firstnumber=2
+    numbersep=8pt,% how far the line-numbers are from the code
+    stepnumber=1, % the step between two line-numbers.
+    numberstyle=\tiny\ttfamily,
+    % code ----
+    language=#1,
+    tabsize=2,
+    showspaces=false, % show spaces with underscores
+    showstringspaces=false, % underline spaces within strings
+    showtabs=false, % show tabs using underscores
+    breaklines=true, % sets automatic line breaking
+    breakindent=8pt,
+    basicstyle=\footnotesize\ttfamily,
+    columns=fullflexible,
+    keywordstyle=\color{black},
+    morekeywords={
+      <, >,
+    },
+  },
+}
+
+% ----------------------------------------
+% draft watermark
+% ----------------------------------------
+\newcommand\enableDraftWatermark{
+  \RequirePackage{draftwatermark}
+  \SetWatermarkFontSize{0.5in}
+  \SetWatermarkColor[gray]{.9}
+  \SetWatermarkText{\parbox{12em}{\centering
+      Unpublished working draft.\\
+      Not for distribution.}}
+}
+
+
+% ----------------------------------------
+% acm prepring
+% ----------------------------------------
+\newcommand\enableACMPreprint{
+  \settopmatter{printacmref=false}
+  \setcopyright{none}
+  \renewcommand\footnotetextcopyrightpermission[1]{}
+  \pagestyle{plain}
+}
+
+% ----------------------------------------
+% blind review authors
+% ----------------------------------------
+\newcommand\addACMBlindReviewAuthors{
+  \author{Removed for double-blind review}
+  \affiliation{%
+    \institution{Removed for double-blind review}}
+
+  \author{Removed for double-blind review}
+  \affiliation{%
+    \institution{Removed for double-blind review}}
+
+  \author{Removed for double-blind review}
+  \affiliation{%
+    \institution{Removed for double-blind review}}
+
+  \renewcommand{\shortauthors}{Removed for double-blind review}
+}
+
+\newcommand\addIEEEBlindReviewAuthors{
+  \author{
+  \IEEEauthorblockN{Removed for double-blind review}
+  \IEEEauthorblockA{Removed for double-blind review  \\ Removed for double-blind review}
+  \and
+  \IEEEauthorblockN{Removed for double-blind review}
+  \IEEEauthorblockA{Removed for double-blind review  \\ Removed for double-blind review}
+  \and
+  \IEEEauthorblockN{Removed for double-blind review}
+  \IEEEauthorblockA{Removed for double-blind review  \\ Removed for double-blind review}
+  }
+}
