@@ -44,6 +44,8 @@
 \input{latex_helper}
 %---------- Algorithm ----------%
 \input{conf_alg}
+%---------- PDF ----------%
+\usepackage{pdfpages}
 %---------- Tables ----------%
 \usepackage{multicol}
 \usepackage{booktabs}
@@ -183,6 +185,9 @@ Thanks
 \normalfont
 \appendix
 \input{body/08_Appendix}
+%\appendix
+\chapter{Datasheet}\label{chap:datasheet}
+\includepdf[pages=-]{body/Datasheet}
 
 \bibliographystyle{bibstyles/IEEEtran}
 

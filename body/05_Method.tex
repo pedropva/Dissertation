@@ -20,26 +20,21 @@ In the feature extraction stage, firstly we split the frames and audio from the 
 CNNs tend to learn low-level features (\textit{e.g.}, in the visual domain: edges, corners, contours) at their first layers. At the intermediate and final layers, the combination of these features helps to extract more complex features, resulting in a vector of continuous values, referred to as \textit{embeddings}, that might be used for classification and other tasks. In this work, we use two benchmark CNNs to extract both image and audio \textit{embeddings} by using a transfer learning technique~\cite{tan2018survey}.
 
 
-
 %Afterwards, we apply PCA (+ whitening) to reduce feature dimensions to 1024, followed by quantization (1 byte per coefficient).
 %These two compression techniques reduce the size of the data by a factor of 8. The mean vector and covariance matrix for PCA was computed on all frames from the Train partition. We quantize each 32-bit float into 256 distinct values (8 bits) using optimally computed (non-uniform) quantization bin boundaries. We confirmed that the size reduction does not significantly hurt the evaluation metrics. In fact, training all baselines on the full-size data (8 times larger than what we publish), increases all evaluation metrics by less than 1%.
-
-\pva{explicar pq escolheu as cnns (youtube) e qual foram os paramretros usados (pca e hiperparametros)}
-
+\pva{Falar do pca e da quantizacao?}
 
 By using the feature extraction method created for the Youtube-8m benchmark, we can test an feature extraction method that is powerful enough to represent features that can be in multiple tasks, such as multi-label video classification, video recommendation, and human activity recognition.
 
 "Since the video-level representations are unsupervised (extracted independently of the labels), these representations are far less specialized to the labels associated with the current dataset, and can generalize better to new tasks or video domains."~\cite{abu2016youtube}
 
-In order to validate our dataset, we used the same feature extraction method used in the Youtube-8m dataset challenges~\cite{abu2016youtube}, both networks were pre-trained and frozen and they were not retrained for application sensitive content classification. Which gives future works an opportunity to develop even more efficient and smaller feature extraction networks for this specific task.
+In order to validate our dataset, we used the same feature extraction method used in the Youtube-8m dataset challenges~\cite{abu2016youtube}, both networks were pre-trained and frozen. They were not retrained for application sensitive content classification. Which gives future works an opportunity to develop even more efficient and smaller feature extraction networks for this specific task.
 
 
-To generate image frame features and audio features we decode each video at approximately 1 frame-per-second and feed an InceptionV3  network~\cite{szegedy2016rethinking} pre-trained on the ImageNet\footnote{\url{http://www.image-net.org/}} dataset.
- 
-We also make use of a AudioVGG~\cite{hershey2017cnn} network with pre-trained weights in the Audioset\footnote{\url{https://research.google.com/audioset/}} dataset to extract the audio embeddings. Each of these CNNs were used as published by their authors; the only modification was the removal of classification layers in both CNNs to obtain their respective embeddings.
+As described in ~\cite{abu2016youtube},
+To generate image frame features and audio features we decode each video at approximately 1 frame-per-second. For the image frame features, we used an InceptionV3  network~\cite{szegedy2016rethinking} pre-trained on the ImageNet\footnote{\url{http://www.image-net.org/}} dataset. We also use of a AudioVGG~\cite{hershey2017cnn} network with pre-trained weights in the Audioset\footnote{\url{https://research.google.com/audioset/}} dataset to extract the audio embeddings.
 
-Next, we apply Principal Component Analysis (PCA)~\cite{wold1987principal} to each of the outputs to reduce the dimensions of both embeddings and to generate feature vectors of size 1024 and 128 for frame and audio embeddings respectively.
-%DETALHAR MAIS AQUI DE QTO PRA QTO O PCA REDUZ
+Each of these CNNs were used as published by their authors; the only modification was the removal of classification layers in both CNNs to obtain their respective embeddings.
 
 \section{Feature Fusion}
 \label{sec:feature_fusion}
@@ -48,7 +43,7 @@ Once we have the features from both image and audio, we should make a decision a
 %\pva{For a more recent survey about data fusion and multimedia retrieval, please refer to \cite{jiang2013features}.}
 In this work, because we have high abstraction level features, we opted to investigate the most simple approach, which is to use a single model on the concatenated features from both media inputs.
 
-Specifically, we concatenate both image and audio embeddings extracted in the current frame and audio window in order to compose the final embeddings as a sequence of the same size of the number of seconds of the video. After this concatenation, each time-step has 1,152 features: 128 audio features and 1024 frame features.
+Because of this, in order to create the final embeddings, we concatenate both image and audio embeddings extracted in the same frame and audio window. This generates a sequence of the same size of the number of seconds of the video. After this concatenation, each time-step has 1,152 features: 128 audio features and 1024 frame features.
 
 Notice that with this approach, the video is transformed into a time series, and to use it in non-sequential models (\textit{e.g.}~SVM, KNN, and MLP) we need to turn this sequence into a single feature vector that represents the whole video. In our setting, we did that by taking the average, median, standard deviation, min, and max values for each feature to represent the entire video. In summary, we turn the sequence of features with size $n$ and shape $n$ by 1,152 into a single feature with shape 1 by 5,760.
 
@@ -101,13 +96,13 @@ This one was selected because it is also commonly used as a final classifier on 
 % \item 
 %Lastly, \textit{Long short-term memory (LSTM)}, different than the feed-forward neural networks, process the entire sequences of data using feedback connections.
 % \end{enumerate}
-
+For model evaluation, we performed 20-fold cross validation for all baseline models.
 %
 \section{Proposed Analysis}\label{sec:experiments}
 
-We evaluate the performances of baseline classifiers over the video \textit{embeddings} that were extracted from our dataset, described in Section \ref{sec:dataset}. Then, we choose the best performing classifier during validation stage and test its performance on the \textit{test sets}.  
+We evaluate the performances of baseline classifiers over the video \textit{embeddings} that were extracted from our dataset, described in Chapter \ref{chap:dataset}. Then, we choose the best performing classifier during validation stage and test its performance on the \textit{test sets}.  
 %\pva{maybe add a image for the process?}
-We designed a set of cases that might help us find insights and assess the performance and shortcomings of our approach.  
+We designed a set of cases that might help us find insights and assess the performance and shortcomings of our dataset and approach.  
 
 % In this work our goal is to create and validate a approach for sensitive content detection in video.
 
@@ -118,7 +113,9 @@ We designed a set of cases that might help us find insights and assess the perfo
 %     \item Can the same model have a performance higher than 90\% on both pornography and violence detection tasks?
 % \end{enumerate}
 
-Our objective with these analysis is to attest the quality of our approach at detecting sensitive content on video.
+Our objective with these analysis is to attest the quality of our dataset and approach at detecting sensitive content on video.
+
+We did not perform extensive hiperparameter optimization on the baseline models, we performed most hiperparameters changes on the SVM model, since it is the model most sensitive to hiperparameters optimization.
 %, while also answering our research questions, stated in Section \ref{sec:introduction}.
 % In this analysis, our objective is to attest to the quality of our video \textit{embeddings}.
  
@@ -126,23 +123,23 @@ Our objective with these analysis is to attest the quality of our approach at de
 % Next, in Subsection \ref{sec:metrics} we describe the evaluation metrics.
 % And finally, in Subsection \ref{sec:results} we present our empirical findings.
 \begin{enumerate}[start=0,label={(\bfseries E\arabic*):}]
-\item The sensitive content detection task: This is the main analysis of this work, in this analysis we test the capabilities of our approach and the best performing classification model on our test subset.%\pva{maybe referenciar ao subset de teste do nosso dataset?}
+%\item The sensitive content detection task: This is the main analysis of this work, in this analysis we test the capabilities of our approach and the best performing classification model on our test subset.%\pva{maybe referenciar ao subset de teste do nosso dataset?}
 
-\item The pornography detection task: In this analysis we evaluate our approach and the best performing classification model on the pornography detection task using our test subset.
+%\item The pornography detection task: In this analysis we evaluate our approach and the best performing classification model on the pornography detection task using our test subset. 
 
-\item The gore detection task: In this analysis we evaluate our approach and the best performing classification model on the gore detection task using our test subset.
+%\item The gore detection task: In this analysis we evaluate our approach and the best performing classification model on the gore detection task using our test subset.
 
-\item Test with training only on image features: In this analysis we evaluate our approach on the our test subset using the audio features only.
+\item Testing only on image features: In this analysis we evaluate our approach on the our test subset using the visual (frames) features only.
 
-\item Testing on the pornography-2k:  In this analysis we evaluate our approach on the pornography-2k dataset.
+\item Testing only on audio features: In this analysis we evaluate our approach on the our test subset using the audio features only.
 
-\item Testing pornography audio only videos: In this analysis we evaluate our approach on the pornography-2k dataset using the audio features only.
+%\item Testing on the pornography-2k: In this analysis we evaluate our approach on the pornography-2k dataset.
 
-\item Testing on the gore test set: In this analysis we evaluate our approach on the gore test subset.
+\item Testing pornography using audio only videos: In this analysis we evaluate our approach on the pornography-2k dataset using the audio features only.
 
-\item Testing gore audio videos: In this analysis we evaluate our approach on the gore test subset using the audio features only.
-%\item Testing on the medical images set
+\item Testing pornography using only on image features: In this analysis we evaluate our approach on the pornography-2k dataset using the visual features only.
 %\item esting MEDIAEVAL Violent Scenes Dataset
+
 \item Investigate misclassified videos in the test sets: In this analysis case we search for insights on what videos our approach fails to correctly detect sensitive content.
 % \item sequence classification models vs non-sequence models
 \end{enumerate}

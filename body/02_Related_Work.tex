@@ -7,6 +7,8 @@
 \pva{VERIFICAR: https://www.sciencedirect.com/science/article/pii/S0925231217312493}
 
 \pva{TABELA COMPARATIVA DOS TRABALHOS RELACIONADOS}
+ %O dataset que mais se aproximou com a nossa definição foi o MediaEval 2015, porém nosso dataset vem de principalmente de gravações amadoras ou CCTV, não de cenas cinematográficas.
+ 
 % commented out because wqe have a more recent paper from theese same authors
 %Song and Kin~\cite{song2018pornographic} create a scheme for detecting pornography videos using multimodal features: Image descriptor features of the frame sequence, extracted using the VGG-16 CNN\cite{vgg}, motion features extracted using optical flow\cite{opticalflow}, and audio features extracted using a Mel-scaled spectrogram.
 %The final features for each model are obtained by an average pooling of each of the features by a sample in the video.
@@ -53,7 +55,7 @@ Using only the visual and auditory features, a video classifier and an audio cla
 By using both features together, one fusion classifier is also trained.
 Then, these three component classifiers are combined in an ensemble scheme to reduce the false-negative errors and for faster detection. 
 The proposed detection method yields a true positive rate of 95.40\% and a false negative rate of 4.60\% on the pornography class, totaling a recall for the pornography class of 95.40\%. 
-The dataset used was the pornography-2k\cite{2kdataset} dataset plus examples of videos with only pornographic or non-pornographic audio collected by the authors. 
+The dataset used was the NPDI 2k-pornography\cite{2kdataset} dataset plus examples of videos with only pornographic or non-pornographic audio collected by the authors. 
 % This work is similar to ours because it also uses a multimodal approach to detection, albeit ours is not for pornography detection only.
 % It also uses the same sampling rate of a frame for each second and uses a deep learning method for extracting high-level features, which are then classified by one or more machine learning models. 
 % Our work has a different dataset, comprised of pornography, gore, and violent videos for the inappropriate class and miscellaneous and educational YouTube videos as an appropriate class. 
