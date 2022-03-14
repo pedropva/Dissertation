@@ -23,14 +23,10 @@ max   & 99,2885                  & 99,1915                   & 99,0836          
 \label{tab:cross-validation-results}
 \end{table}
 
-Comparing the models in Table \ref{tab:cross-validation-results} the model with the highest Weighed F2-Score is the Multilayer Perceptron model. Although it has the second highest standard deviation, it is still small enough such that the smallest variation still is higher than the second best model, the Long-Short-Term-Memory model.\pva{adicionar teste de diferença significativa}
+\section{Model comparisson}\label{sec:comparisson}
+Comparing the models in Table \ref{tab:cross-validation-results} the model with the highest mean weighed F2-Score across folds is the Multilayer Perceptron model. To compare the models and test if their results are statistically different. 
 
-\begin{figure*}[!ht]
-    \centering
-    \includegraphics[width=0.5\textwidth]{img/results/boxplot.png}
-    \caption{Boxplot of the results of each model throughout the 20-fold cross validation.}
-    \label{fig:results-boxplot}
-\end{figure*}
+Afterwards, we test if the model with the best model has a statistically significant difference from the second best by performing a post-hoc pairwise hypotesis test.
 
 \begin{figure*}[!ht]
     \centering
@@ -39,7 +35,57 @@ Comparing the models in Table \ref{tab:cross-validation-results} the model with 
     \label{fig:results-histogram}
 \end{figure*}
 
-Figures \ref{fig:results-boxplot} and \ref{fig:results-histogram}, show the difference in the distribution of results of each model. The simplest model, K-Nearest Neighbors, has the most difference from the models. The three other models, however, are relatively close.
+Figure \ref{fig:results-histogram} shows the difference in the distribution of results of each model. The simplest model, K-Nearest Neighbors, has the most difference from the models. The three other models, however, are relatively close to each other.
+
+To determine what test is better suited for our data distribution (the best weighed F2-Score), we checked our data for normality and outliers. Which are frequent assumptions for different hypothesis tests.
+For the normality assumption we used probability plots, as shown in Figure \ref{fig:prob-plots} to test if the data is normal.
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/results/pp-plot.png}
+    \caption{Probability plots for each model, it shows the data's quantiles against the quantiles of a theoretical distribution (the normal distribution).}
+    \label{fig:prob-plots}
+\end{figure*}
+
+As shown in Figure \ref{fig:prob-plots}, the KNN and SVM models differ from a normal distribution. 
+
+In order to validate what is shown in the probability plots, we also tested the normality assumption with the Shapiro-Wilk test. The null hypotesis is that the data is not drawn from a normal distribution. The alternative hypotesis is that the data is drawn from a normal distribution.
+
+According to the Shapiro-Wilk test, the MLP and LSTM models follow a normal distribution (p<0.05). As for the SVM and KNN models, they do not follow a normal distribution (p>0.05). So our data does not support tests that requires data with normal distribution.
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/results/boxplot.png}
+    \caption{Boxplot of the results of each model throughout the 20-fold cross validation.}
+    \label{fig:results-boxplot}
+\end{figure*}
+
+For outliers presence, as seen by the box plot in Figure \ref{fig:results-boxplot}, there are outliers in the SVM and KNN data.
+
+When tested with of most parametric tests, both outliers and non-normal distributions can bias the results and potentially lead to incorrect conclusions if not handled properly.
+
+To choose a test, we chose a non-parametric (sample median) test, because sample medians are less sensitive to outliers, in contrast with the mean or variance based parametric tests, such as ANOVA.
+%https://www.reneshbedre.com/blog/kruskal-wallis-test.html
+We defined the null hypothesis as "All models folds evaluations medians are equal"; The alternative hypothesis is that "At least one model mean rank (median) is different from other groups".
+We used a two-tailed test since we do not know which model will be higher.
+Our chose our alpha as 0.05. That is, a probability of 5\% of committing a error, rejecting the null hypothesis when it should be accepted.
+
+We chose the Kruskal-Wallis test \cite{kruskal1952use} as our hypothesis test because it fits all of our requisites (non-parametric, median based). Our data also supports all of this test's assumptions.
+
+After applying the Kruskal-Wallis test we obtained a p-value of 2.2733e-11, which means that p<0.05 and that we can reject the null hypothesis and accept the alternative hypothesis.
+
+To determine which models are statistically different from each other, we performed a post-hoc test using the Nemenyi post hoc test \cite{nemenyi1963distribution}, because it is a non-parametric (distribution free) test and our data does not follow a normal distribution. The results from this test are presented in Figure \ref{fig:significance-matrix}.
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/results/significance-matrix.png}
+    \caption{Significance matrix. Plot made with scikit-posthocs\cite{Terpilowski2019}.}
+    \label{fig:significance-matrix}
+\end{figure*}
+
+As presented in Figure \ref{fig:significance-matrix}, the MLP and LSTM models are not significantly different from each other (p>0.05) and that the KNN model is statistically different from all other models (p<0.05).
+
+\section{Tests results}\label{sec:tests}
 
 We tested the best performing model, the Multilayer-Perceptron, on the test subset, shown in Table \ref{tab:test-general-results}. 
 
@@ -128,14 +174,6 @@ weighted avg & 0,9008    & 0,8900 & 0,8893   & 0,8883   & 2.000,0000
     \label{fig:cf-test-2k}
 \end{figure*}
 
-
-\section{Discussion}\label{sec:discussion}
-% Falar dos resultados de teste e de cada task
-% Para tarefas de porn, o mais comum foram falsos negativos, como esperado
-% Para tarefas  de gore, o mais comum foram falsos positivos, que previram como sensivel mas eram safe, que é o idela, mas pq esses videos sao bem parecidos com safe
-% Falar dos erros do pornography2k, que usou f2 score, de quanto foi o modelo deles, e dos erros mais comuns (Falsos negativos) 
-% Falar pq isso aconteceu, qual a diferença entre os dois datasets e os modelos
-% por eles usarem late fusion talvez tenha ajudado, especialmente pq o nosso modelo usa só as features de imagem
 \section{Analysis cases}\label{sec:experiments-discussion}
 
 In order to further investigate the impact of each multi-modal feature in our best performing model, the Multilayer Perceptron, we tested it on our test subset and on the NPDI 2k-pornography dataset, but only using one modal feature at a time. For example, in Figure \ref{fig:cf-test-image}, we tested the MLP model using only visual (frames) features, specifically, were changed all audio features for zero to simulate a video with no audio features.
@@ -172,7 +210,7 @@ As observed in Figures \ref{fig:cf-test-image} and \ref{fig:cf-test-audio}, our 
     \caption{Confusion matrices of the model on the NPDI 2k-pornography dataset using only one multi-modal feature at a time.}
 \end{figure*}
 
-We confirmed this pattern with the test with the NDPI 2k-pornography dataset, as shown in Figures \ref{fig:cf-test-2k-image} and \ref{fig:cf-test-2k-audio}.%, our model relied only in visual features.
+We confirmed this pattern with the test with the NPDI 2k-pornography dataset, as shown in Figures \ref{fig:cf-test-2k-image} and \ref{fig:cf-test-2k-audio}.%, our model relied only in visual features.
 
 % Discutir vantagens e desvantagens do eraly fusion por causa de forçar o modelo a aprender uma mdeia de cada e depois combinar
 % Possibilidades pra so ter aprendido imagens:
@@ -182,3 +220,27 @@ We confirmed this pattern with the test with the NDPI 2k-pornography dataset, as
 %Features ruins de audio
 % Receptive field pra áudio pequeno
 % Audio n faz diferença ***: perguntar pra paulo oq ele quis dizer
+Because of the late fusion approach, in which the model receives both feature types and decides which ones to use the most we were susceptible to this learning behavior.
+There are multiple reasons that could explain these results:
+\begin{itemize}
+    \item The difference in the size of visual features and audio features (1024 for visual and 128 for audio);
+    \item This specific model learned ignore the audio features;
+    \item Audio features did not offer as much differentiation power as much as the visual features in this dataset.
+    \item The audio feature extraction method did not offer as much differentiation power as much as the visual features.
+\end{itemize}
+
+To use late fusion in the multimodal features could improve our performance in this task because a model is trained for each multimodal feature, assuring use of each available feature type.
+
+\section{Discussion}\label{sec:discussion}
+% Falar dos resultados de teste e de cada task
+When testing the best performing model, the MLP, there was little variation on the test subset performance. 
+% Para tarefas de porn, o mais comum foram falsos negativos, como esperado
+On the pornography detection task, the results were still within the expected performance and the most frequent errors were false negatives, which is a error we want no minimize the most over false positives.
+% Para tarefas  de gore, o mais comum foram falsos positivos, que previram como sensivel mas eram safe, que é o idela, mas pq esses videos sao bem parecidos com safe
+On the gore detection task, there was a significant performance drop, which could be a reflection of the smaller amount of gore examples in the dataset, or could mean that this approach is less adequate to the gore detection task than to the pornography detection task.
+
+% Falar dos erros do pornography2k, que usou f2 score, de quanto foi o modelo deles, e dos erros mais comuns (Falsos negativos) 
+When testing the best performing model on the NPDI 2k-pornography dataset, there was a significant drop in performance compared the test subset, this could mean that our model overfitted in our dataset or that our dataset misses specific hard instances of either class. This could also be due to the model's lack of use of audio features.
+
+% Falar pq isso aconteceu, qual a diferença entre os dois datasets e os modelos
+% por eles usarem late fusion talvez tenha ajudado, especialmente pq o nosso modelo usa só as features de imagem

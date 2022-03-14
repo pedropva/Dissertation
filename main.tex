@@ -47,6 +47,7 @@
 %---------- PDF ----------%
 \usepackage{pdfpages}
 %---------- Tables ----------%
+\usepackage{lscape}
 \usepackage{multicol}
 \usepackage{booktabs}
 \usepackage{colortbl}
@@ -137,10 +138,10 @@
 % Internal jury members are declared with \jurymember{name}{title}{department}{university}
 % external jury members are declared with \extjurymember{name}{title}{university}
 \jury{
-% TODO
-\pva{PREENCHER BANCA}
-%   \jurymember{Alberto Barbosa Raposo}{Prof.}{Departamento de Informática}{PUC-Rio}
-%   \extjurymember{}{Dr.}{Disney Research}
+\jurymember{Alberto Barbosa Raposo}{Prof.}{Departamento de Informática}{PUC-Rio}
+\extjurymember{Sandra Eliza Fontes de Avila}{Prof.}{Universidade Estadual de Campinas}%{Instituto de Computação}
+%Universidade Estadual de Campinas
+\extjurymember{Julio Cezar Duarte}{Prof.}{Instituto Militar de Engenharia}%{Secção de Engenharia de Computação}%Instituto Militar de Engenharia
 }
 
 %---------- Front letters ----------%
@@ -187,7 +188,7 @@ Thanks
 \input{body/08_Appendix}
 %\appendix
 \chapter{Datasheet}\label{chap:datasheet}
-\includepdf[pages=-]{body/Datasheet}
+\includepdf[pages=-]{body/VideoMR_Dataset_Datasheet}
 
 \bibliographystyle{bibstyles/IEEEtran}
 

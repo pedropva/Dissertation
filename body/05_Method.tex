@@ -22,7 +22,7 @@ CNNs tend to learn low-level features (\textit{e.g.}, in the visual domain: edge
 
 %Afterwards, we apply PCA (+ whitening) to reduce feature dimensions to 1024, followed by quantization (1 byte per coefficient).
 %These two compression techniques reduce the size of the data by a factor of 8. The mean vector and covariance matrix for PCA was computed on all frames from the Train partition. We quantize each 32-bit float into 256 distinct values (8 bits) using optimally computed (non-uniform) quantization bin boundaries. We confirmed that the size reduction does not significantly hurt the evaluation metrics. In fact, training all baselines on the full-size data (8 times larger than what we publish), increases all evaluation metrics by less than 1%.
-\pva{Falar do pca e da quantizacao?}
+%\pva{Falar do pca e da quantizacao?}
 
 By using the feature extraction method created for the Youtube-8m benchmark, we can test an feature extraction method that is powerful enough to represent features that can be in multiple tasks, such as multi-label video classification, video recommendation, and human activity recognition.
 
@@ -32,18 +32,20 @@ In order to validate our dataset, we used the same feature extraction method use
 
 
 As described in ~\cite{abu2016youtube},
-To generate image frame features and audio features we decode each video at approximately 1 frame-per-second. For the image frame features, we used an InceptionV3  network~\cite{szegedy2016rethinking} pre-trained on the ImageNet\footnote{\url{http://www.image-net.org/}} dataset. We also use of a AudioVGG~\cite{hershey2017cnn} network with pre-trained weights in the Audioset\footnote{\url{https://research.google.com/audioset/}} dataset to extract the audio embeddings.
+To generate image frame features and audio features we decode each video at approximately 1 frame-per-second. For the image frame features, we used an InceptionV3  network~\cite{szegedy2016rethinking} pre-trained on the ImageNet\footnote{\url{http://www.image-net.org/}} dataset. We also use of a variation of the VGG network~\cite{simonyan2014VGG}, called VGGish, with pre-trained weights in the Audioset\footnote{\url{https://research.google.com/audioset/}} dataset to extract the audio embeddings.
 
 Each of these CNNs were used as published by their authors; the only modification was the removal of classification layers in both CNNs to obtain their respective embeddings.
 
 \section{Feature Fusion}
 \label{sec:feature_fusion}
 
-Once we have the features from both image and audio, we should make a decision about which method is best to fuse the information from these different domains. Snoek et al. \cite{snoek2005featurefusion} presents two main strategies for information fusion in semantic video analysis: \emph{Early fusion} methods, which works directly with the extracted features, and \emph{Late fusion} methods, which operates on classification outputs from specialized models.
-%\pva{For a more recent survey about data fusion and multimedia retrieval, please refer to \cite{jiang2013features}.}
-In this work, because we have high abstraction level features, we opted to investigate the most simple approach, which is to use a single model on the concatenated features from both media inputs.
+Once we have the features (embeddings) from both image and audio, we should make a decision about which method is best to fuse the information from these different domains, as described in Chapter \ref{chap:theory}, Section \ref{sec:feature_fusion}.
 
-Because of this, in order to create the final embeddings, we concatenate both image and audio embeddings extracted in the same frame and audio window. This generates a sequence of the same size of the number of seconds of the video. After this concatenation, each time-step has 1,152 features: 128 audio features and 1024 frame features.
+Although the Late fusion approach tends to give better performance~\cite{snoek2005featurefusion}, it comes with increased computability cost.
+
+In this work we have high abstraction level features and are making baseline models for this dataset, because of that, we opted to investigate the approach with the lesser computability cost, which is to train a single model on the concatenated features from both media inputs (Early Fusion).
+
+In order to create the final embeddings, we concatenate both image and audio embeddings extracted in the same frame and audio window. This generates a sequence of the same size of the number of seconds of the video. After this concatenation, each time-step has 1,152 features: 128 audio features and 1024 frame features.
 
 Notice that with this approach, the video is transformed into a time series, and to use it in non-sequential models (\textit{e.g.}~SVM, KNN, and MLP) we need to turn this sequence into a single feature vector that represents the whole video. In our setting, we did that by taking the average, median, standard deviation, min, and max values for each feature to represent the entire video. In summary, we turn the sequence of features with size $n$ and shape $n$ by 1,152 into a single feature with shape 1 by 5,760.
 
@@ -73,17 +75,17 @@ In a sequential representation, although time series classifiers usually output 
     \label{fig:model-sequence}
     \vspace{-1em}
 \end{figure*}
-Although a sequential representation contains possibly much more redundant data than the non-sequential one, it could give the sequential classification model an important edge of detail over the less granular non-sequential ones.
+Although a sequential representation contains possibly much more redundant data than the non-sequential one, it could give the sequential classification model an important edge of detail over the less granular non-sequential ones. Furthermore, with a sequential approach, one could train a model to classify the whole video, but when at testing time, to stop classification as soon as the current sample is classified as sensitive, allowing for near-real time classification.
 % To do the feature classification task, we experimented four well known classification mohave dels, one using extracted video features in the time series format, and three that use a single aggregated feature vector.
 
 For the sequential classification model, we chose the Long Short-Term Memory (LSTM)\cite{hochreiter1997long} networks.
 It has been a commonly used time series classification baseline model. %\pva{mayber say we'll test GRUs?}
 
-For the non-sequence models, we chose Support Vector Machines (SVM)~\cite{cortes1995support}, K-Nearest Neighbors (KNN)~\cite{peterson2009k}, and Multilayer Perceptron (MLP)~\cite{haykin2009neural}.
+For the non-sequence models, we chose Support Vector Machines (SVM)~\cite{cortes1995support} , K-Nearest Neighbors (KNN)~\cite{peterson2009k}, and Multilayer Perceptron (MLP)~\cite{haykin2009neural}.
 Among all of the experimented models, the \textit{Support Vector Machine (SVM)} is the most used in the literature.
 % \begin{enumerate}[leftmargin=*]
 % \item 
-It is a classification model in which the data is mapped into a higher dimension input space, where an optimal separating hyper-plane is constructed.
+It is a classification model in which the data is mapped into a higher dimension input space, where an optimal separating hyper-plane is constructed. We used the RBF kernel and C=1.
 % These decision surfaces are found by solving a linearly constrained quadratic programming problem.
 % \item 
 The second model, \textit{K-Nearest Neighbors (KNN)} uses distance measure between training samples so that the k-nearest neighbors always belong to the same class, while samples from different classes are separated by a large margin. 

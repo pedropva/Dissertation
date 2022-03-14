@@ -4,18 +4,20 @@
 \chapter{Conclusions}
 \label{chap:conclusions}
 
-In this work we propose a multi-modal approach to sensitive content detection in video. Our model uses both audio and visual features. It uses pre-trained convolutional neural networks that are relatively simple to understand, and  applies a late-fusion feature method, which is simpler than the early fusion approach since we use a single model to classify both features.
+In this work we created a large scale video dataset for sensitive content detection and a multi-modal approach to sensitive content detection in video. 
+%Our model uses both audio and visual features. 
+It uses pre-trained convolutional neural networks, and applies a late-fusion feature method, which is simpler than the early fusion approach since we use a single model to classify both features.
 
-We intend to evaluate our models by testing on other known datasets. We expect to validate this simple approach while maintaining a similar performance to the existing methods.
+We evaluated our models by testing on a test subset and on a popular dataset. We expected to validate our dataset and approach while maintaining a similar performance to the existing methods.
 
-It is important to note that our method is not focused on mobile platforms, therefore memory and disk space are not major constraints. 
+It is important to note that our approach is not focused on mobile platforms, therefore memory and disk space were not major constraints. 
 
-It is worth mentioning that our results are not directly comparable to existing ones since our definitions of violence do not match the ones used in other works. 
+It is worth mentioning that our results on the sensitive content detection are not directly comparable to the related works since our definitions of violence do not match them. However, we could compare our approach on the pornography detection sub-task by testing our best performing baseline model on the NPDI 2k-pornography dataset. Our approach yielded and F2-Score of 86.83\%, compared to our related work, \pva{colocar valor do trabalho relacionado e citar}
 
-\section{Currently published papers on this work}
+\section{Currently published papers}
 \label{sec:contrib}
 
-By the the time of this writing, two papers have already been published in  conferences: \cite{2019NSFWbaseline}, and \cite{2020PornDetectionSBIE}, and we have finished the construction of the large scale dataset for sensitive content detection, to be published soon.
+By the the time of this writing, three papers about this work have already been published in conferences: \cite{2019NSFWbaseline}, \cite{2020PornDetectionSBIE}, and \cite{shouldisee}. We also have finished the construction of the dataset for sensitive content detection, to be published soon.
 
 \section{Future Work}
 \label{sec:future}
@@ -23,7 +25,10 @@ By the the time of this writing, two papers have already been published in  conf
 
 % após o fim desse trabalho é claro que ainda muitos locais em nossa abordagem para melhoria, mas somente com uma extraçaõ de features generalista e baselines, já conseguimos alcançar abordagens estado da arte
 %imagino que a partir daqui, o sentido do progresso do trabalho é diminuir e simpleificar a extração de features, ao mesmo tempo especializando, ou seja, treinando a extração de features para a prórpia tarefa
-         
+Even with generic feature extraction CNNs we archieved almost 90\% on the pornography detection task. 
+One future work is to create a late fusion model and evaluate it based on each feature type.
+Another possible future work is to add motion information, such as optical flow, to the dataset.
+Another possibility is to extend this approach even further, creating new CNNs from scratch to classify the videos based on, audio, visual and motion features.
 Test if a sequential model can outperform a non-sequential model in specific cases that demand long term memory, such as long videos with very small sensitive scenes.
 
 \section{Acknowledgements}
