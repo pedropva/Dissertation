@@ -4,12 +4,108 @@
 \chapter{Theory and technical background}
 \label{chap:theory}
 
-\section{Convolutional Neural Networks}\label{sec:CNN}
-Neural Networks
-Image classification: ImageNet\footnote{\url{http://www.image-net.org/}}
-Audio classification: Audioset\footnote{\url{https://research.google.com/audioset/}}
+This Chapter aims to set a basic understanding the concepts underlying the techniques used in this Dissertation.
 
-vanishing gradient problem. with deep cnns
+\section{Artificial Neural Networks}\label{sec:NNs}
+
+Artificial Neural Networks (ANNs) are machine learning models inspired by the Biologic Neuron. The Perceptron~\cite{rosenbaltt1957perceptron} is one of the main precursors of modern ANNs. The Perceptron is a mathematical model of the Neuron, it is capable of binary classification. It draws its differentiation power from adjusting a linear function with its weights. It can differentiate any linearly separable problem, that is, any problem in which a hyperplane (a plane in multiple dimensions) can separate the two classes of the data.
+
+A Perceptron receives $m$ inputs, denoted $X$, it holds $m$ weights $W$, one weight for each input, and a $bias$. During training, the weights $W$ and the $bias$ are adjusted in order to optimize hyperplane separation.
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/Perceptron.drawio.png}
+    \caption{The Perceptron and its components, the input layer, the weights, the weighted sum and bias, the activation function and the output layer.}
+    \label{fig:perceptron}
+\end{figure*}
+
+To obtain the output of a Perceptron (a prediction), its weights are multiplied by the inputs, then the sum of these multiplications are summed and then a bias is added this result. This weighted sum of the input features can be calculated through Equation \ref{eq:perceptron}. 
+\begin{equation}\label{eq:perceptron}
+\displaystyle\sum_{i=1} ^{m} (x_i w_i)+bias
+\end{equation}
+Where $m$ is the number of inputs, $x_i$ and $w_i$ are the inputs and weights and $i$ is the number of the input. Finally, the weighted sum of the input features (and bias) are input through an activation function, which in the original perceptron is a \textit{Step function}, but in Figure \ref{fig:perceptron}, which shows a diagram of the Perceptron structure, is a \textit{Hyperbolic tangent} function. The result of the activation function is the output of the Perceptron.
+
+The learning process of the Perceptron is adjusting the weights and the bias so that the hyperplane can separate the training data up to a set metric.
+
+%While the Perceptron can only solve Linearly separable problems, the Multi Layer Perceptron (MLP) can solve non-Linear problems. 
+By stacking layers of multiple Perceptrons, one can approximate any continuous function, rather than only linear functions, thus being able to solve both linear and non-linear problems. MLPs are also known as Fully Connected (FC) neurals networks when combined with other modern neural networks.
+The general structure of a Multi Layer Perceptron (MLP), as shown in Figure \cite{fig:mlp-structure} consists on a input layer, one or more hidden layers, and a output layer.
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/MLP.drawio.png}
+    \caption{The Multi Layer Perceptron}
+    \label{fig:mlp-structure}
+\end{figure*}
+
+The training procedure for the MLP is called \textit{Backpropagation}. It is a process in which the loss value is calculated to measure the error rate of a output. The loss value is used to adjust the weights of the neural network in the reverse sequence of the prediction process. Gurney et. al.\cite{gurney2018introduction} further details the Perceptron and the Multi Layer Perceptron and how the learning on each of them occurs.
+
+When training MLPs, some problems may arise. Overfitting and Underfitting, are, respectively, learning to match the exact pattern of the training data, and not approximating (or learning) the desired pattern enough, in both cases, the network fails to generalize to data outside of the training set. For Overfitting, there are many techniques that mitigate this problem, such as dropout (when some neurons are randomly deactivated when training), and cross validation (split training set in chunks and training with random chunks). Underfitting, on the flip side, may mean that the complexity of the model is too small for the train set or that the training data is insufficient. 
+%or learning rate (the size of Backpropagation adjustments)
+
+\section{Convolutional Neural Networks}\label{sec:CNN}
+
+
+The concept of Neural Networks can also be applied on to computer vision, by combining the concept of convolutions and neural networks, Kunihiko Fukushima created the precursor of modern Convolutional Neural Networks (CNNs), the "neocognitron"\cite{neocognitron1980} in 1980.
+
+To understand CNNs, one must first understand the convolution operation, used in many image processing techniques.
+%https://vincmazet.github.io/bip/filtering/convolution.html
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/convolution.png}
+    \caption[The Convolution Operation]{The Convolution operation, this is the main operation behind Convolutional Neural Networks. Image author: Anh H. Reynolds\footnotemark}
+    \label{fig:convolution}
+\end{figure*}
+%https://anhreynolds.com/blogs/cnn.html
+
+Convolutions consist on applying a filter (or mask), a matrix of values, to a image. As exemplified in Figure \ref{fig:convolution}\footnotetext{\url{https://anhreynolds.com/blogs/cnn.html}}. The operations consists on multiplying each value on the mask for the equivalent pixel (on the current image patch) in the image, then sum all results of these multiplications, this will be the new pixel value of the resulting image/feature map.
+
+%\pva{formula aqui?}
+
+In CNNs, each value of the filter is learned, as if the wheights to be learned in the neural networks are now the values of the convolutional mask.
+Each convolution layer has its learned weights for their filters, therefore each convolution layer will process the inputs even further, each layer passing its output to the next.
+
+
+CNNs also use an operation called Pooling in order to reduce the size of the of the input of a layer (downsample), and consequently speed up computation, by "distilling" the features they become more robust to noise.
+
+The two most common methods of pooling are average and max pooling. Max pooling takes the max value of each neighboring neurons/inputs while average pooling is the average value of each neighboring neurons/inputs. As represented in Figure \ref{fig:avgmax-pooling}.
+
+There are also two different ways to perform Pooling operations. Local pooling reduces the output of the previous neurons/inputs per channel.
+Global pooling combines values of previous neurons/inputs across dimensions, or channels, in the feature map. 
+
+%https://androidkt.com/explain-pooling-layers-max-pooling-average-pooling-global-average-pooling-and-global-max-pooling/
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.55\textwidth]{img/pooling.jpg}
+    \caption{Local Max and Average Pooling representation. Image authors are Yingge et. al.\cite{yingge2020pooling}}
+    \label{fig:avgmax-pooling}
+\end{figure*}
+
+In the first stage of a traditional image classification CNN is comprised of convolutional and pooling layers, extracting and disitlling characthistics as the layers get deeper into the model, this is called the feature extraction stage. Then, the features are input to the classification stage, which is usually a fully connected layer of neurons (a Multilayer Perceptron). The classification stage outputs 
+%the activations or probabilities for each class, which then are used to decide 
+the predicted class. This generic image classification CNN is shown in Figure \ref{fig:generic-cnn}.
+%in the 1980s by Yann LeCun, a postdoctoral computer science researcher.
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/generic-convnet.png}
+    \caption{A generic image classification CNN architecture, representing the feature extraction stage and the classification stage. Note that as the inputs progress through the CNN the width and height of the inputs become smaller, but the number of feature channels/dimensions increases. Image authors are Khozeimeh et. al.\cite{khozeimeh2021cnnimage}}
+    \label{fig:generic-cnn}
+\end{figure*}
+
+As convolutional layers get deeper, the level of abstraction also gets higher, as an example, in a generic image classification CNN, the last layers the features may represent more abstract concepts, such as the presence of objects and complex shapes such as cars. These abstractions depend on what images the CNN was trained and what is it supposed to classify. 
+
+Once a CNN is trained with success, it should have learned representations as features that allow it to differentiate between classes. By training a new classifier on the already existent learned concepts (features) in the last convolutional layers, one can modify this generic CNN to classify between dogs and cats or types of car. One could also use the same trained generic CNN and continue training it on a different task, using the already learned concepts as a head start, the CNN would also learn more specific concepts to this task as the training continues. This is called transfer learning. 
+
+%2009
+One of the most popular datasets and challenges for CNNs is the The ImageNet Large Scale Visual Recognition Challenge (ILSVRC)\footnote{\url{http://www.image-net.org/}}\cite{deng2009imagenet}, in 2012 it hosted the work that ushered a boom in CNN research and development when AlexNet achieved a top-5 error of 15.3\% in the ILSVRC, more than 10.8 percentage points lower than that of the second place. The ImageNet dataset has more than 100.000 "synonym sets" which are sets of words or phrases that represent the image. The dataset holds multiple challenges for tasks such as Image classification, Single-object localization and Object detection, each of the subsets for these tasks have 1000 classes (or objects).
+
+A CNN trained on the ImageNet dataset, can learn a wide variety of abstractions, from cars to dogs, because of the wide scope of their image classification task. This makes CNNs pre-trained in the ImageNet dataset specially performant as transfer learning models~\cite{huh2016makes}.
+
+With the success of CNNs, researchers started modifying and applying these models on other domains, such as audio, time series and natural processing language
+
+The equivalent of the ImageNet dataset for the audio classification is the Audioset\footnote{\url{https://research.google.com/audioset/}}~\cite{gemmeke2017audioset}. It is an ontology of 632 audio classes and 2,084,320 human-labeled 10-second sound clips collected from YouTube videos. Its classes range from human and animal sounds, musical instruments and genres, and common everyday environmental sounds.
+
+With the advent of deeper CNNs, one problem also surfaced: The vanishing gradient problem, it occurs when the error propagation makes the training diverge, the values of weights become too small. To avoid this problem, there are multiple techniques, such as the Rectified Linear Unit (ReLU) activation function~\cite{krizhevsky2012relu}, and lower the learning rate, thus taking smaller steps when adjusting the weights.
 
 \section{The VGG Convolutional Neural Network}\label{sec:VGGish}
 
@@ -26,8 +122,6 @@ The configuration of the fully connected layers is the same in all configuration
 \end{figure*}
 
 \section{VGGish}\label{sec:VGGish}
-VGGish~\cite{simonyan2014VGG}
-
 The VGGish is a variation of the VGG-11 (Configuration A), created by the authors of the YouTube8m dataset ~\cite{abu2016youtube}, with some modifications to perform audio (spectogram) classification and embeddings generation).
 
 Specifically, the input size was modified to 96$\times$64 for log mel spectogram audio inputs. The last group of convolution and maxpool layers were removed. In order to created a compact embedding layer, the 1000 channels wide FC layer at the end was changed to a 128-wide FC layer. This final layer does not have an non-linear activation.
@@ -49,13 +143,20 @@ The ``Naive'' inception module, as shown in Figure \ref{fig:naive-inception} con
     \label{fig:naive-inception}
 \end{figure*}
 
-In order to reduce computational costs further, the authors added 1$\times$1 convolutions after the max pooling step and before the 3$\times$3 and 5$\times$5 convolutions. By doing this the authors reduce the amount of processing done by reducing the quantity of input channels before the convolutions. This improvement was named ``The inception module with dimension reduction'' and it is represented in Figure \ref{fig:}.  
+% \begin{figure*}[!ht]
+%     \centering
+%     \includegraphics[width=0.95\textwidth]{img/inceptionv3.png}
+%     \caption{Inception V3 Architecture\footnote{\url{https://cloud.google.com/tpu/docs/inception-v3-advanced}}.}
+%     \label{fig:naive-inception}
+% \end{figure*}
+
+In order to reduce computational costs further, the authors added 1$\times$1 convolutions after the max pooling step and before the 3$\times$3 and 5$\times$5 convolutions. By doing this the authors reduce the amount of processing done by reducing the quantity of input channels before the convolutions. This improvement was named ``The inception module with dimension reduction'' and it is represented in Figure \ref{fig:red-dim-inception}.  
 
 \begin{figure*}[!ht]
     \centering
     \includegraphics[width=0.95\textwidth]{img/inception-module.png}
     \caption{The inception module with dimensional reduction, image authors are Szegedy et. al.~\cite{szegedy2015Inception}.}
-    \label{fig:inception}
+    \label{fig:red-dim-inception}
 \end{figure*}
 
 By stacking 9 inception modules with dimension reduction and using 2 intermediate classifiers, essentially computing prediction values and using these values to compute auxiliary losses, which are then used to compose the final loss in the training process in order to avoid the vanishing gradient problem.
