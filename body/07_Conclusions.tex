@@ -6,13 +6,15 @@
 
 In this work we created a large scale video dataset for sensitive content detection and a multi-modal approach to sensitive content detection in video. 
 %Our model uses both audio and visual features. 
-It uses pre-trained convolutional neural networks, and applies a late-fusion feature method, which is simpler than the early fusion approach since we use a single model to classify both features.
+It uses pre-trained convolutional neural networks, and applies a early-fusion feature method, which is simpler than the late-fusion approach since we use a single model to classify both features.
 
-We evaluated our models by testing on a test subset and on a popular dataset. We expected to validate our dataset and approach while maintaining a similar performance to the existing methods.
+We evaluated our models by testing on a test subset and on a popular dataset. We validated our dataset and baseline approach while maintaining a similar performance to the existing methods.
 
 It is important to note that our approach is not focused on mobile platforms, therefore memory and disk space were not major constraints. 
 
-It is worth mentioning that our results on the sensitive content detection are not directly comparable to the related works since our definitions of violence do not match them. However, we could compare our approach on the pornography detection sub-task by testing our best performing baseline model on the NPDI 2k-pornography dataset. Our approach yielded and F2-Score of 86.83\%, compared to our related work, \pva{colocar valor do trabalho relacionado e citar}
+It is worth mentioning that our overall results on the sensitive content detection are not directly comparable to the related works since their definition of violence do not match ours. However, we could compare our approach on the pornography detection task by testing our best performing baseline model on the NPDI 2k-pornography dataset. Our approach yielded and F2-Score of 88.83\%, compared to our related works, Moreira et. al. with
+93.53\%~\cite{moreira2019multimodal} and who also aims at pornography and violence detection, and
+Wehrmann et. al. with 95.20\% \cite{wehrmann2018adult}, aiming at only pornography.
 
 \section{Currently published papers}
 \label{sec:contrib}
@@ -27,9 +29,10 @@ By the the time of this writing, three papers about this work have already been 
 %imagino que a partir daqui, o sentido do progresso do trabalho é diminuir e simpleificar a extração de features, ao mesmo tempo especializando, ou seja, treinando a extração de features para a prórpia tarefa
 Even with generic feature extraction CNNs we archieved almost 90\% on the pornography detection task. 
 One future work is to create a late fusion model and evaluate it based on each feature type.
-Another possible future work is to add motion information, such as optical flow, to the dataset.
-Another possibility is to extend this approach even further, creating new CNNs from scratch to classify the videos based on, audio, visual and motion features.
-Test if a sequential model can outperform a non-sequential model in specific cases that demand long term memory, such as long videos with very small sensitive scenes.
+Another possibility is to extend this approach even further, creating new CNNs from scratch to classify the videos based on, audio, visual and motion features. Both training the feature extraction methods from scratch and using a late fusion could help create a model that balances the use of each multimodal feature.
+Another possible future work is to add motion information, such as optical flow, to the dataset and our approach.
+One could also test if a sequential model can outperform a non-sequential model in specific cases that demand long term memory, such as long videos with very small sensitive scenes.
+Finally, one could investigate misclassified videos in the test sets and use explainability techniques to search for insights on what circunstances our approach fails to correctly detect sensitive content.
 
 \section{Acknowledgements}
 \label{sec:acks}

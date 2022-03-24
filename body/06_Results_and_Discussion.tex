@@ -64,7 +64,7 @@ For outliers presence, as seen by the box plot in Figure \ref{fig:results-boxplo
 
 When tested with of most parametric tests, both outliers and non-normal distributions can bias the results and potentially lead to incorrect conclusions if not handled properly.
 
-To choose a test, we chose a non-parametric (sample median) test, because sample medians are less sensitive to outliers, in contrast with the mean or variance based parametric tests, such as ANOVA.
+To choose a test, we chose a non-parametric (sample median) test, because sample medians are less sensitive to outliers, in contrast with the mean or variance based parametric tests, such as Variance Analysis (ANOVA).
 %https://www.reneshbedre.com/blog/kruskal-wallis-test.html
 We defined the null hypothesis as "All models folds evaluations medians are equal"; The alternative hypothesis is that "At least one model mean rank (median) is different from other groups".
 We used a two-tailed test since we do not know which model will be higher.
@@ -176,7 +176,7 @@ weighted avg & 0,9008    & 0,8900 & 0,8893   & 0,8883   & 2.000,0000
 
 \section{Analysis cases}\label{sec:experiments-discussion}
 
-In order to further investigate the impact of each multi-modal feature in our best performing model, the Multilayer Perceptron, we tested it on our test subset and on the NPDI 2k-pornography dataset, but only using one modal feature at a time. For example, in Figure \ref{fig:cf-test-image}, we tested the MLP model using only visual (frames) features, specifically, were changed all audio features for zero to simulate a video with no audio features.
+As detailed in analysis \textbf{(E0)} and \textbf{(E1)} (Section \ref{sec:experiments}), in order to further investigate the impact of each multi-modal feature in our best performing model, the Multilayer Perceptron. We tested it on our test subset and on the NPDI 2k-pornography dataset, but only using one modal feature at a time. For example, in Figure \ref{fig:cf-test-image}, we tested the MLP model using only visual (frames) features, specifically, were changed all audio features for zero to simulate a video with no audio features.
 
 \begin{figure*}[!ht]
     \centering
@@ -210,7 +210,7 @@ As observed in Figures \ref{fig:cf-test-image} and \ref{fig:cf-test-audio}, our 
     \caption{Confusion matrices of the model on the NPDI 2k-pornography dataset using only one multi-modal feature at a time.}
 \end{figure*}
 
-We confirmed this pattern with the test with the NPDI 2k-pornography dataset, as shown in Figures \ref{fig:cf-test-2k-image} and \ref{fig:cf-test-2k-audio}.%, our model relied only in visual features.
+As described in analysis \textbf{(E2)} and \textbf{(E3)} (Section \ref{sec:experiments}), we confirmed the same pattern in the tests with the NPDI 2k-pornography dataset, as shown in Figures \ref{fig:cf-test-2k-image} and \ref{fig:cf-test-2k-audio}.%, our model relied only in visual features.
 
 % Discutir vantagens e desvantagens do eraly fusion por causa de forçar o modelo a aprender uma mdeia de cada e depois combinar
 % Possibilidades pra so ter aprendido imagens:
@@ -224,23 +224,24 @@ Because of the late fusion approach, in which the model receives both feature ty
 There are multiple reasons that could explain these results:
 \begin{itemize}
     \item The difference in the size of visual features and audio features (1024 for visual and 128 for audio);
-    \item This specific model learned ignore the audio features;
-    \item Audio features did not offer as much differentiation power as much as the visual features in this dataset.
-    \item The audio feature extraction method did not offer as much differentiation power as much as the visual features.
+    \item This specific model learned to ignore the audio features;
+    \item The audio features did not offer as much differentiation power as much as the visual features in this dataset.
+    \item The audio feature extraction method did not offer as much differentiation power as the visual features.
 \end{itemize}
 
 To use late fusion in the multimodal features could improve our performance in this task because a model is trained for each multimodal feature, assuring use of each available feature type.
 
 \section{Discussion}\label{sec:discussion}
 % Falar dos resultados de teste e de cada task
-When testing the best performing model, the MLP, there was little variation on the test subset performance. 
+When testing the best performing model, the MLP, there was little variation on the test subset performance. One explanation to this could be that our dataset is mostly homogeneous (Does not have much variation in videos characteristics). This could also be a consequence of the dataset's sampling, resulting in a test subset similar to the train/validation subset.  However, there steps taken to avoid both these possibilities. The dataset was created with a wide variety of videos within each subclass, such as education and sports for the safe videos, and the test subset was a random sampling that followed the distribution of main tags within each of subclasses.
 % Para tarefas de porn, o mais comum foram falsos negativos, como esperado
-On the pornography detection task, the results were still within the expected performance and the most frequent errors were false negatives, which is a error we want no minimize the most over false positives.
+On the pornography detection task, the results were still within the expected performance and the most frequent errors were false negatives, which is an error we want no minimize the most over false positives.
 % Para tarefas  de gore, o mais comum foram falsos positivos, que previram como sensivel mas eram safe, que é o idela, mas pq esses videos sao bem parecidos com safe
 On the gore detection task, there was a significant performance drop, which could be a reflection of the smaller amount of gore examples in the dataset, or could mean that this approach is less adequate to the gore detection task than to the pornography detection task.
 
 % Falar dos erros do pornography2k, que usou f2 score, de quanto foi o modelo deles, e dos erros mais comuns (Falsos negativos) 
-When testing the best performing model on the NPDI 2k-pornography dataset, there was a significant drop in performance compared the test subset, this could mean that our model overfitted in our dataset or that our dataset misses specific hard instances of either class. This could also be due to the model's lack of use of audio features.
+When testing the best performing model on the NPDI 2k-pornography dataset, there was a significant drop in performance compared the test subset, this could possibly be due to the model's lack of use of audio features. This could also mean that our dataset misses specific hard instances of either class.
 
 % Falar pq isso aconteceu, qual a diferença entre os dois datasets e os modelos
 % por eles usarem late fusion talvez tenha ajudado, especialmente pq o nosso modelo usa só as features de imagem
+

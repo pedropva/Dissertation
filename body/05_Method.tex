@@ -7,9 +7,8 @@ In this section we detail our method for sensitive content detection in video. W
 \begin{figure*}[!ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/model-2.png}
-    \caption{Bimodal architecture for NSFW video classification.}
+    \caption{Our approach to sensitive video detection (binary classification)}
     \label{fig:model}
-    \vspace{-1em}
 \end{figure*}
 
 In the feature extraction stage, firstly we split the frames and audio from the video; then, for each media, we use a CNN to extract the features (or embeddings) from each simultaneous video segment. In the second stage, Feature Fusion, we concatenate both audio and frame features. If the classification model is not sequential, we also aggregate the features in this stage. Finally, in the feature classification stage we feed one of the classification models to be experimented with.
@@ -34,7 +33,7 @@ In order to validate our dataset, we used the same feature extraction method use
 As described in ~\cite{abu2016youtube},
 To generate image frame features and audio features we decode each video at approximately 1 frame-per-second. For the image frame features, we used an InceptionV3  network~\cite{szegedy2016rethinking} pre-trained on the ImageNet\footnote{\url{http://www.image-net.org/}} dataset. We also use of a variation of the VGG network~\cite{simonyan2014VGG}, called VGGish, with pre-trained weights in the Audioset\footnote{\url{https://research.google.com/audioset/}} dataset to extract the audio embeddings.
 
-Each of these CNNs were used as published by their authors; the only modification was the removal of classification layers in both CNNs to obtain their respective embeddings.
+Each of these CNNs were used as published by their authors; We adopted their respective versions for feature embedding generation, on which the only modification was the removal of classification layers in both CNNs to obtain their respective embeddings.
 
 \section{Feature Fusion}
 \label{sec:feature_fusion}
@@ -54,7 +53,7 @@ Notice that with this approach, the video is transformed into a time series, and
 
 % \pva[inline]{porque foi escolhidos esses modelos de classficação, qual a relação deles com o nosso tipo de dado de vídeo.}
 
-For the feature classification task, we will investigate both sequential models (which use the extracted embeddings in a time series format), and non-sequential ones (which use a single aggregated embeddings vector).
+For the feature classification task, we investigate both sequential models (which use the extracted embeddings in a time series format), and non-sequential ones (which use a single aggregated embeddings vector).
 We want to experiment with both approaches in order to investigate if a more compact format, such as the single embeddings vector, can yield results at least as good (or even better) than the full feature sequence data.
 %Furthermore, we can test if a sequential model can outperform a non-sequential model in specific cases that demand long term memory, such as long videos with very small sensitive scenes.
 As an example, one can think of a long video that has a pornographic scene in one second out of its entirety. 
@@ -88,7 +87,7 @@ Among all of the experimented models, the \textit{Support Vector Machine (SVM)} 
 It is a classification model in which the data is mapped into a higher dimension input space, where an optimal separating hyper-plane is constructed. We used the RBF kernel and C=1.
 % These decision surfaces are found by solving a linearly constrained quadratic programming problem.
 % \item 
-The second model, \textit{K-Nearest Neighbors (KNN)} uses distance measure between training samples so that the k-nearest neighbors always belong to the same class, while samples from different classes are separated by a large margin. 
+The second model, \textit{K-Nearest Neighbors} uses distance measure between training samples so that the k-nearest neighbors always belong to the same class, while samples from different classes are separated by a large margin. 
 It was chosen because it used also by related work, although it is a simple classification method.
 % \item 
 The third model is the \textit{Multilayer-perceptron (MLP)}, which contains layers of nodes: an input layer, an output layer and various hidden layers in between. 
@@ -102,7 +101,7 @@ For model evaluation, we performed 20-fold cross validation for all baseline mod
 %
 \section{Proposed Analysis}\label{sec:experiments}
 
-We evaluate the performances of baseline classifiers over the video \textit{embeddings} that were extracted from our dataset, described in Chapter \ref{chap:dataset}. Then, we choose the best performing classifier during validation stage and test its performance on the \textit{test sets}.  
+In Chapter \ref{chap:results} we evaluate the performances of baseline classifiers over the video \textit{embeddings} that were extracted from our dataset, described in Chapter \ref{chap:dataset}. Then, we choose the best performing classifier during validation stage and test its performance on the \textit{test sets}.  
 %\pva{maybe add a image for the process?}
 We designed a set of cases that might help us find insights and assess the performance and shortcomings of our dataset and approach.  
 
@@ -117,7 +116,7 @@ We designed a set of cases that might help us find insights and assess the perfo
 
 Our objective with these analysis is to attest the quality of our dataset and approach at detecting sensitive content on video.
 
-We did not perform extensive hiperparameter optimization on the baseline models, we performed most hiperparameters changes on the SVM model, since it is the model most sensitive to hiperparameters optimization.
+We did not perform extensive hiperparameter optimization on the baseline models, we performed hiperparameters changes on the SVM model the most, since it is most sensitive to hiperparameters optimization.
 %, while also answering our research questions, stated in Section \ref{sec:introduction}.
 % In this analysis, our objective is to attest to the quality of our video \textit{embeddings}.
  
@@ -142,7 +141,7 @@ We did not perform extensive hiperparameter optimization on the baseline models,
 \item Testing pornography using only on image features: In this analysis we evaluate our approach on the pornography-2k dataset using the visual features only.
 %\item esting MEDIAEVAL Violent Scenes Dataset
 
-\item Investigate misclassified videos in the test sets: In this analysis case we search for insights on what videos our approach fails to correctly detect sensitive content.
+%\item Investigate misclassified videos in the test sets: In this analysis case we search for insights on what videos our approach fails to correctly detect sensitive content.
 % \item sequence classification models vs non-sequence models
 \end{enumerate}
 

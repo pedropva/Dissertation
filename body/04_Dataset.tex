@@ -25,11 +25,11 @@ In this Chapter, we present how our \textit{dataset} was collected, how it is st
 
 \subsection{Safe content}\label{subsec:dataset-safe}
 
-For \textit{safe content}, we chose to sample instances from Youtube8M\footnote{\url{https://research.google.com/youtube8m}}~\cite{abu2016youtube}. We chose this dataset because of the size of the dataset (8 million videos) and because of the wide variety of video classification challenges it supports. We selected 55.000 random videos inside each of the 24 top-level categories, proportionally to the original dataset distribution. As there was no limit for the sample size, we did not had to use any rules to keep small categories. 
+For \textit{safe content}, we chose to sample instances from Youtube8M\footnote{\url{https://research.google.com/youtube8m}}~\cite{abu2016youtube}. We chose this dataset because of it's size (8 million videos) and because of the wide variety of video classification challenges it supports. We selected 55.000 random videos inside each of the 24 top-level categories, proportionally to the original dataset distribution. As there was no limit for the sample size, we did not had to use any rules to keep small categories. 
 
 We successfully collected 50,988 Youtube videos with metadata. 4,012 of the 55,000 sampled videos failed to download or were unavailable. 
 
-We also collected 8,663 videos from Youtube, hereby refered as ``cherry-picked" safe videos, those videos were selected for the purpose of incremeting the amount of ``hard" videos, as done in \cite{2kdataset}, which are videos that could possibly be misclassified as sensitive, such as MMA, breastfeeding, pool party, beach and other videos that have a higher amount of skin exposure. The amount of cherry-picked videos collected are listed by its respective query in Table \ref{tab:non-yt-count}. The collection was made by automated means, an script automatically searched and tried to download all videos from the first 100 result pages of each query.
+We also collected 8,663 videos from Youtube, hereby refered as ``cherry-picked" safe videos, those videos were selected for the purpose of incremeting the amount of ``hard" videos, as done in \cite{2kdataset}, which are videos that could possibly be misclassified as sensitive, such as Mixed Martial Arts (MMA), breastfeeding, pool parties, beaches and other videos that have a higher amount of skin exposure. The amount of cherry-picked videos collected are listed by its respective query in Table \ref{tab:non-yt-count}. The collection was made by automated means, a script automatically searched and tried to download all videos from the first 100 result pages of each query.
 
 \subsection{Sensitive content}\label{subsec:dataset-sensitive}
 
@@ -39,9 +39,7 @@ For the pornography, we to sample videos from the XVideos\footnote{\url{https://
 
 We sampled 55.000 random videos in each tag in equal proportion to the original distribution in these tags. In particular, to prevent tags with fewer videos from disappearing, we have defined that the minimum sample for each tag is the size of the smallest tag. The smallest tag was 'asmr' with 63 videos.
 
-We successfully collected 54,549 pornography videos with metadata. 451 of the 55,000 sampled videos failed to download or were unavailable. 
-
-We also collected 10,519 ``hard" videos from XVideos, specifically videos that have low skin exposure, fully dressed people, latex costumes, and cosplay. %8572 of those got successsfully mapped to the xvideos database and have metadata
+We successfully collected 54,549 pornography videos with metadata. 451 of the 55,000 sampled videos failed to download or were unavailable. We also collected 10,519 ``hard" videos from XVideos, specifically videos that have low skin exposure, fully dressed people, latex costumes, and cosplay. %8572 of those got successsfully mapped to the xvideos database and have metadata
 
 For the gore content, we used a web crawler to extract 2,356 gore videos from various websites dedicated to gore media, such as, BestGore\footnote{\url{https://www.bestgore.com/}} and GoreBrasil\footnote{\url{https://www.gorebrasil.com}}. As these videos were the harder to find and collect, we collected all available videos from each website, no sampling method was applied. Most videos did not stay online more than one week. As there was no contact with the videos and the videos did not have any tags, all metadata collected were the title of the videos. 
 
@@ -93,13 +91,13 @@ Max Duration          & 00:30:55   & 00:30:55    \\
 \hline
 Min Duration          & 00:00:05   & 00:00:05    \\ 
 \hline
-Total Size            & 1.2TiB     & 2.2TiB      \\ 
+Total Size            & 1,2TiB     & 2,2TiB      \\ 
 \hline
-Mean Size             & 19.3MiB    & 39.0MiB     \\ 
+Mean Size             & 19,3MiB    & 39,0MiB     \\ 
 \hline
-STD Size              & 35.4MiB    & 42.3MiB     \\ 
+STD Size              & 35,4MiB    & 42,3MiB     \\ 
 \hline
-Features Size         & 519.4GiB   & 376.8GiB    \\ 
+Features Size         & 519,4GiB   & 376,8GiB    \\ 
 \hline
 Tag coverage          & 63036      & 59651       \\ 
 \hline
@@ -134,13 +132,13 @@ Max Duration          & 00:30:55                  & 00:16:56                  & 
 \hline
 Min Duration          & 00:00:05                  & 00:00:05                  & 00:00:05                      \\ 
 \hline
-Total Size            & 1.2TiB                    & 15.8GiB                   & 2.2TiB                        \\ 
+Total Size            & 1,2TiB                    & 15,8GiB                   & 2,2TiB                        \\ 
 \hline
-Mean Size             & 19.8MiB                   & 6.9MiB                    & 39.0MiB                       \\ 
+Mean Size             & 19,8MiB                   & 6,9MiB                    & 39,0MiB                       \\ 
 \hline
-STD Size              & 35.9MiB                   & 13.9MiB                   & 42.3MiB                       \\ 
+STD Size              & 35,9MiB                   & 13,9MiB                   & 42,3MiB                       \\ 
 \hline
-Features Size         & 515.3GiB                  & 4.1GiB                    & 376.8GiB                      \\ 
+Features Size         & 515,3GiB                  & 4,1GiB                    & 376,8GiB                      \\ 
 \hline
 Tag coverage          & 63036                     & 0                      & 59651                         \\ 
 \hline
@@ -153,7 +151,7 @@ By using macro and micro classes of this dataset, our dataset  also supports oth
 \begin{itemize}
     \item Multi label classification (or tagging) of pornographic videos;
     \item Multi label classification of "Safe" (Videos that do not contain sensitive content);
-    \item Binary classification of extremely violent videos;
+    \item Binary classification of extremely violent (gore) videos;
     \item Binary classification of pornography.
 \end{itemize}
 
@@ -185,10 +183,10 @@ Mean Duration     & 00:06:00    & 00:01:21 & 00:04:27  \\ \hline
 STD Duration      & 00:03:44    & 00:01:48 & 00:02:32  \\ \hline
 Max Duration      & 00:30:29    & 00:16:56 & 00:29:01  \\ \hline
 Min Duration      & 00:00:05    & 00:00:07 & 00:00:07  \\ \hline
-Total Size        & 80.2GiB     & 1.5GiB   & 204.8GiB  \\ \hline
-Mean Size         & 14.3MiB     & 6.6MiB   & 35.1MiB   \\ \hline
-STD Size          & 25.6MiB     & 14.4MiB  & 35.0MiB   \\ \hline
-Features Size     & 42.6GiB     & 424.1MiB & 34.5GiB   \\ \hline
+Total Size        & 80,2GiB     & 1,5GiB   & 204,8GiB  \\ \hline
+Mean Size         & 14,3MiB     & 6,6MiB   & 35,1MiB   \\ \hline
+STD Size          & 25,6MiB     & 14,4MiB  & 35,0MiB   \\ \hline
+Features Size     & 42,6GiB     & 424,1MiB & 34,5GiB   \\ \hline
 Tag coverage      & 5695        & 0        & 5968      \\ \hline
 Tag coverage (\%) & 99,3545     & 0,0000   & 100,0000 
 \end{tabular}
@@ -215,13 +213,13 @@ Max Duration          & 00:33:40                  & 00:20:16                    
 \hline
 Min Duration          & 00:00:05                  & 00:00:02                       \\ 
 \hline
-Total Size            & 26.4GiB                   & 18.5GiB                        \\ 
+Total Size            & 26,4GiB                   & 18,5GiB                        \\ 
 \hline
-Mean Size             & 27.0MiB                   & 18.9MiB                        \\ 
+Mean Size             & 27,0MiB                   & 18,9MiB                        \\ 
 \hline
-STD Size              & 31.1MiB                   & 21.9MiB                        \\ 
+STD Size              & 31,1MiB                   & 21,9MiB                        \\ 
 \hline
-Features Size         & 7.6GiB                    & 3.1GiB                         \\ 
+Features Size         & 7,6GiB                    & 3,1GiB                         \\ 
 \hline
 Tag coverage          & 0                      & 0                           \\ 
 \hline
@@ -236,7 +234,7 @@ Tag coverage (\%)     & 0                       & 0                            \
 %https://en.wikipedia.org/wiki/Sensitivity_and_specificity
 %https://en.wikipedia.org/wiki/Precision_and_recall
 
-To evaluate each experiment and our approach, we will use Precision (P), Recall (R) and, most importantly, the weighted F2-score. In this section we present a contextualized explanation these metrics.
+To evaluate each experiment and our approach, we will use Precision (P), Recall (R) and, most importantly, the weighted F2-score. In this section we present a contextualized explanation of these metrics.
 
 % FROM: de morereira et al 2019
 %For assessing the performance of the pornography locators, we re-port thenormalized classification accuracyrate (ACC), and theF2measure(F2). Prior to explaining ACC, we need to definerecallandspecificityfrom the point of view of pornography localization.  Specificity, in turn, measures the capacity of alocator to correctly identify truly negative video seconds as so. A spe-cificity of only 50%, for example, means the system mislabels one inevery two seconds of non-pornographic content, wrongly identifying itas sensitive. In this vein, ACC is the mean of recall and specificity. Ahigher accuracy indicates a higher capability of separating porno-graphic video seconds from non-pornographic ones.F2measure, in turn, is a more complex metric that depends also onthe concept ofprecision. From the point of view of pornography loca-lization, precision expresses how many seconds are truly relevant (i.e.,pornographic), among all the ones that a locator identifies as such.Therefore, F2is the weighted harmonic mean of recall and precision,which gives twice more weight to recall than to precision, by means of a=β2parameter.Eq. (7)depicts the original Fβformula=+ ×××+Fβprecision  recallβ   precision  recall(1    ),β22(7)in which we use=β2. In doing so, F2lets us pay more attention to therecall of the solutions, rather than to their precision. This is usefulbecause, in the case of pornographyfiltering, false-negative answers areworse than the false-positive ones. It is less prejudicial to wrongly denythe access to non-pornographic content, than to wrongly disclose por-nographic content. Hence, we can consider that a solution with higherF2measure is better, because it cares more about how many porno-graphic video seconds are really beingfiltered out (recall), instead ofhow many“supposedly”positive seconds are indeed pornographic(precision)
@@ -272,7 +270,7 @@ F_\beta = (1+\beta^2) \times \frac{P \times R}{(\beta^2 \times P) + R}
 
 The $F_\beta$-score, defined in Equation~\ref{equation:fbeta}, evaluates the classifier by the harmonic mean between Precision and Recall. To account for label imbalance, after calculating the F2-score metrics for each label, we find their average weighted by support (the number of true instances for each label). 
 
-Most related works use either F1-score ($\beta=1$) or F2-score ($\beta=2$) metrics as their main evaluation metric. While the F1-score represents an balanced performance metric, the F2-score gives twice more weight to the recall than to precision, which means that the metric is more focused on the recall of a solution.
+Most related works, such as~\cite{moreira2019multimodal,wehrmann2018adult,torres2018automatic}, use either F1-score ($\beta=1$) or F2-score ($\beta=2$) metrics as their main evaluation metric. While the F1-score represents an balanced performance metric, the F2-score gives twice more weight to the recall than to precision, which means that the metric is more focused on the recall of a solution.
 
 % in the case of pornographyfiltering, false-negative answers areworse than the false-positive ones. It is less prejudicial to wrongly denythe access to non-pornographic content, than to wrongly disclose por-nographic content. Hence, we can consider that a solution with higherF2measure is better, because it cares more about how many porno-graphic video seconds are really beingfiltered out (recall), instead ofhow many“supposedly”positive seconds are indeed pornographic(precision)
 In this work, the F2-score represents an overall performance metric, while the precision and recall metrics can give insights on what the classifier model is doing better and what to improve. We chose the weighted F2-score as our main evaluation metric because when detecting sensitive content it is more important to predict a truly sensitive video than to predict a safe video as sensitive.

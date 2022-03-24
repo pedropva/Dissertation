@@ -4,7 +4,7 @@
 \chapter{Theory and technical background}
 \label{chap:theory}
 
-This Chapter aims to set a basic understanding the concepts underlying the techniques used in this Dissertation.
+This Chapter aims to set a basic understanding on the concepts underlying the techniques used in this Dissertation.
 
 \section{Artificial Neural Networks}\label{sec:NNs}
 
@@ -20,6 +20,7 @@ A Perceptron receives $m$ inputs, denoted $X$, it holds $m$ weights $W$, one wei
 \end{figure*}
 
 To obtain the output of a Perceptron (a prediction), its weights are multiplied by the inputs, then the sum of these multiplications are summed and then a bias is added this result. This weighted sum of the input features can be calculated through Equation \ref{eq:perceptron}. 
+%https://www.sciencedirect.com/topics/computer-science/multilayer-perceptron
 \begin{equation}\label{eq:perceptron}
 \displaystyle\sum_{i=1} ^{m} (x_i w_i)+bias
 \end{equation}
@@ -29,7 +30,7 @@ The learning process of the Perceptron is adjusting the weights and the bias so 
 
 %While the Perceptron can only solve Linearly separable problems, the Multi Layer Perceptron (MLP) can solve non-Linear problems. 
 By stacking layers of multiple Perceptrons, one can approximate any continuous function, rather than only linear functions, thus being able to solve both linear and non-linear problems. MLPs are also known as Fully Connected (FC) neurals networks when combined with other modern neural networks.
-The general structure of a Multi Layer Perceptron (MLP), as shown in Figure \cite{fig:mlp-structure} consists on a input layer, one or more hidden layers, and a output layer.
+The general structure of a Multi Layer Perceptron (MLP), as shown in Figure \ref{fig:mlp-structure} consists on a input layer, one or more hidden layers, and a output layer.
 
 \begin{figure*}[!ht]
     \centering
@@ -101,7 +102,7 @@ One of the most popular datasets and challenges for CNNs is the The ImageNet Lar
 
 A CNN trained on the ImageNet dataset, can learn a wide variety of abstractions, from cars to dogs, because of the wide scope of their image classification task. This makes CNNs pre-trained in the ImageNet dataset specially performant as transfer learning models~\cite{huh2016makes}.
 
-With the success of CNNs, researchers started modifying and applying these models on other domains, such as audio, time series and natural processing language
+With the success of CNNs, researchers started modifying and applying these models on other domains, such as audio, time series and natural language processing.
 
 The equivalent of the ImageNet dataset for the audio classification is the Audioset\footnote{\url{https://research.google.com/audioset/}}~\cite{gemmeke2017audioset}. It is an ontology of 632 audio classes and 2,084,320 human-labeled 10-second sound clips collected from YouTube videos. Its classes range from human and animal sounds, musical instruments and genres, and common everyday environmental sounds.
 
@@ -185,7 +186,7 @@ by 7$\times$1 convolutions.), batch normalization in the Auxillary Classifiers, 
 The Inception CNNs continued to improve further with InceptionV4 and Inception-ResNet ~\cite{szegedy2017inceptionv4}, but we will not detail them here for they are not used in the scope of this work.
 
 
-
+\newpage
 \section{Feature Fusion}
 \label{sec:feature_fusion}
 
@@ -197,9 +198,6 @@ Snoek et al. \cite{snoek2005featurefusion} presents two main strategies for info
     \item \emph{Early fusion} methods (Figure \ref{fig:early-fusion}), which works directly with the extracted features.
     \item \emph{Late fusion} methods (Figure \ref{fig:late-fusion}), which operates on classification outputs from specialized models.
 \end{itemize}
-
-% late fusion comes at cost of training time
-In the work by Snoek et. al.\cite{snoek2005featurefusion}, the Late fusion approach tends to give better performance on most semantic concepts (multilabel video classification) at the cost of increased computability costs. However, the authors also conclude that the late and early fusion approaches should be compared are per concept (in a multilabel situation).%, which one can generalize to per task in binary tasks.
 
 \begin{figure*}[!ht]
     \centering
@@ -215,3 +213,7 @@ In the work by Snoek et. al.\cite{snoek2005featurefusion}, the Late fusion appro
     \end{subfigure}
     \caption{The late and early fusion methods for feature fusion. Image authors are Snoek et. al.~\cite{snoek2005featurefusion}.}
 \end{figure*}
+
+
+% late fusion comes at cost of training time
+In the work by Snoek et. al.\cite{snoek2005featurefusion}, the Late fusion approach tends to give better performance on most semantic concepts (multilabel video classification) at the cost of increased computability costs. However, the authors also conclude that the late and early fusion approaches should be compared are per concept (in a multilabel situation).%, which one can generalize to per task in binary tasks.

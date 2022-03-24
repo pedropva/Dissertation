@@ -5,9 +5,9 @@
 \label{chap:introduction}
 
 % INTRO SLR
-The amount of multimedia content on the internet is increasing each year.
+The amount of multimedia content on the internet is increasing every year.
 More than 300 hours of video are uploaded to YouTube every minute.\footnote{\url{https://biographon.com/youtube-stats}}
-In this context, studies have shown that about 56\% of children between 10 and 13 years old have a smartphone \cite{remosoftware,chollet2017xception}, and 8 out of 10 teenagers have had a friend who shared some sensitive media through social networks such as Facebook, Twitter, and Whatsapp.\footnote{https://www.netnanny.com/the-importance-of-parental-control/}
+In this context, studies have shown that about 56\% of children between 10 and 13 years old have a smartphone \cite{remosoftware,chollet2017xception}, and 8 out of 10 teenagers have had a friend who shared some sensitive media through social networks such as Facebook, Twitter, and Whatsapp.\footnote{\url{https://www.netnanny.com/the-importance-of-parental-control/}}
 
 
 % In Brazil, the ``Cicarely case'' was an example that forced youtube to be blocked.\footnote{\url{http://g1.globo.com/Noticias/Tecnologia/0,,AA1412609-6174-363,00.html}}
@@ -17,10 +17,10 @@ In this context, studies have shown that about 56\% of children between 10 and 1
 This huge amount of data sharing pattern presents a challenge to the control of the type of content that is loaded to these video repositories. By allowing the upload of sensitive content from malicious users, content providers become exposed to legal issues. This is also a problem for users in those platforms, as they might get exposed to this content without a warning.
 
 Methods based on \textit{Deep Learning} (DL) became the \textit{state-of-the-art} in various segments related to automatic video analysis. More specifically, 
-Convolutional Neural Networks (CNN) architectures, or ConvNets, have become the primary method used for audio-visual pattern recognition.
+Convolutional Neural Networks (CNN) architectures, or ConvNets, have become the primary method used for audio-visual pattern recognition~\cite{nayak2021comprehensive,sharma2021video,ullah2021analysis}.
 
-The term \emph{Sensitive content} is often used as a reference to any media that contains content such as nudity, intense sexuality, violence, gore, and any other potentially disturbing or offensive subject.
-On the other hand, a content is labeled as \emph{Safe} when that content is suitable for the general public.
+The term \emph{Sensitive content} is often used as a reference to any media that contains content such as nudity, intercourse, extreme physical violence, gore or any scenes potentially disturbing to the viewer.
+On the other hand, a content is labeled as \emph{Safe} when this content is suitable for the general public.
 
 
 % \begin{figure}[!ht]
@@ -61,10 +61,10 @@ There are four scenes with safe content on the top row, and four scenes with sen
 %Then we evaluate the best model in a dataset created with videos sampled from the Brazilian RNP (National Research Network) repository video@RNP.\footnote{\url{https://www.video.rnp.br}}
 %In our experimentation, the best model achieves a recall of 94.4\% and an F1-score of 95.6\% for pornography class.
 
-Other works, such as \cite{moreira2019multimodal}, share our motivations and objectives, as described in Section \ref{chap:related}. However, most of them do not use both audio and image for classification. We use recent CNNs that have been showing great potential in video recognition and classification. Furthermore, none of them have the same definition of sensitive content as ours. For instance, the violence aspect of sensitive content in \cite{moreira2019multimodal} comprises any kind of physical violence, such as fights. In our definition, the violence aspect is defined by only extremely violent acts, such as torture, death, suicide, etc. %We also have created a large scale dataset that fits our definition of sensitive content.
+Other works, such as \cite{moreira2019multimodal}, share our motivations and objectives, as described in Section \ref{chap:related}. However, most of them do not use both audio and image for classification. We use recent CNNs that have been showing great potential in video recognition and classification. Furthermore, none of them have the same definition of sensitive content as ours. For instance, the violence aspect of sensitive content in \cite{moreira2019multimodal} comprises any kind of physical violence, such as fights. In our definition, the violence aspect is defined by only potentially disturbing scenes and extremely violent acts, such as torture, death, suicide, etc. %We also have created a large scale dataset that fits our definition of sensitive content.
 
 Our work uses two CNNs: one to extract image sequence features and the other to extract audio features.
-As we get one feature vector for each second of the video, we can approach the feature classification task as a time series classification, using a Recurrent Neural Network (RNN) as baseline. We also can combine those features to create a single feature vector for the entire video, which then is used as the input for other baseline classifiers.
+As we get one feature vector for each second of the video, we can approach the feature classification task as a time series classification, using a Recurrent Neural Network (RNN) as baseline. We also can combine those features to create a single feature vector for the entire video, which is then used as the input for other baseline classifiers.
 %Our method uses a rather simpler approach for video classification and yet it still yields results significantly close to related works.
 
 
@@ -72,8 +72,8 @@ As we get one feature vector for each second of the video, we can approach the f
 
 %What is the difference between sensitive content detection and classification?
 
-Although sometimes we may refer to the task we are addressing as sensitive content detection in video, our task is, specifically, binary classification of video: Finding out if sensitive content is or is not present in the video. 
-Furthermore, since there is no frame-by-frame annotation, this dataset does not directly supports the task to find (either time-wise or space-wise) sensitive content in the video. 
+Although sometimes we may refer to the task we are addressing as sensitive content detection in video, our task is, specifically, binary classification of video: Finding out whether sensitive content is or is not present in the video. 
+Furthermore, since there is no frame-by-frame annotation, this dataset does not directly supports the task of finding (either time-wise or space-wise) sensitive content in the video. 
 
 
 %investigar a classifciacao e conteudo sensivel em video, principalmente em videos pornograficos e vi9lencia extrema
@@ -112,23 +112,24 @@ The main contributions of this work are:
 \begin{enumerate}
     % Criamos um dataset para a tarefa de classificacao de conteudo sensivel, o maior do mundo até onde sabemos
     \item To our knowledge, the largest sensitive content detection dataset.
-    \item To our knowledge, we have obtained the best results in this task using only a generalistic feature extraction method and generic classifiers.
+    % \item To our knowledge, we have obtained the best results in this task using only a generalistic feature extraction method and generic classifiers.
     % Testamos baselines nessa tarefa para validar o dataset e o funcionamento da extração de features
-    \item We trained and tested baseline classifiers on the features extracted from our dataset in order to validate both the dataset and the efficiency nad operation of the genralistic feature extraction networks.  
+    \item We trained and tested baseline classifiers on the features extracted from our dataset in order to validate both the dataset and the feature extraction networks.  
     % Experimentamos com diferentes configurações de classificadores, inculsive sequenciais e naõ sequenciais
-    \item We compared sequential and non sequential classifiers in this task.
+    \item We tested sequential and non sequential classifiers in this task.
     % Testamos a importancia dos features de imagem e de audio separadamente
     \item We tested the importance of image and audio features in this task.
     \item We also validate our approach by testing our best baseline in a well known pornography detection dataset, 2k-pornography. 
 \end{enumerate}
-Although the largest dataset for this task by our knowledge, our dataset is not manually labeled, which begs the question if it is noise-less enough for any training and evaluation in this task.  
-Our intent is not to replace the 2k-pornography dataset, but to be a complement it, it still is the gold standard for pornography detection, in our dataset the videos were not manually labeled by a human, so we need to validate this dataset.
 
-To perform this task, we created a large scale dataset, extracted features from this dataset using an generalist and well known feature extraction for video classification method, and performed experiments such as compare baseline classification models, compare which type of classification model (sequential or not) performs best, and compared the importance of audio and image features, further detailed in Chapter \ref{chap:method}.
+To perform the sensitive detection task, we created a large scale dataset, extracted features from this dataset using a generalist and well known feature extraction for video classification method, and performed experiments such as compare baseline classification models, compare which type of classification model (sequential or not) performs best, and compared the importance of audio and image features, further detailed in Chapter \ref{chap:method}.
+
+Although the largest dataset for this task by our knowledge, our dataset is not manually labeled, which begs the question if it is noise-less enough for any training and evaluation in this task.  
+Our intent is not to replace the 2k-pornography dataset, but to be a complement to it, it still is the gold standard for pornography detection, in our dataset the videos were not manually labeled by a human, so we need to validate this dataset. Through this dissertation, we aim to validate our dataset by assembling a baseline approach to tackle this task and then evaluating our baseline approach on a manually labeled dataset, the 2k-pornography dataset.
 
 This dissertation is organized as follows:
 In Chapter \ref{chap:related} we discuss some of the related work.
-In Chapter \ref{chap:theory} we present the theory behind some of the techniques behind the feature extraction method we used.
+In Chapter \ref{chap:theory} we present the theory behind some of the techniques used in the feature extraction method we adopted.
 We present our dataset and metrics in Chapter \ref{chap:dataset}.
 Then, in Chapter \ref{chap:method}, we present baseline models to detect sensitive content in videos.
 
